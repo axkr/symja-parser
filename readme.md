@@ -36,7 +36,7 @@ between upper- and lowercase function names (syntax is similar to Mathematica).
 	}
 ```
 
-Evaluate a math expression string to a [commons-math Complex}(http://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/complex/Complex.html)
+Evaluate a math expression string to a [commons-math Complex](http://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/complex/Complex.html)
 value, with a syntax which distinguishes between upper- and lowercase function names (syntax is similar to Mathematica). 
 ```java
 	public void testComplexEvaluatorMMA() {
@@ -51,7 +51,7 @@ value, with a syntax which distinguishes between upper- and lowercase function n
 	}
 ```
 
-Evaluate a math expression string to a [commons-math Dfp}(http://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/dfp/Dfp.html)
+Evaluate a math expression string to a [commons-math Dfp](http://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/dfp/Dfp.html)
 value, with a syntax which doesn't distinguish between upper- and lowercase function names:
 ```java
 	public void testDfpEvaluatorRelaxed() {
