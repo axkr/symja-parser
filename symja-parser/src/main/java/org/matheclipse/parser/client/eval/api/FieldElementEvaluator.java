@@ -158,6 +158,10 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 		return fVisitor.getVariable(variableName);
 	}
 
+	public boolean isRelaxedSyntax() {
+		return fRelaxedSyntax;
+	}
+
 	/**
 	 * Optimize an already parsed in <code>functionNode</code> into an
 	 * <code>ASTNode</code>.

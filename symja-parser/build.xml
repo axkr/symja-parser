@@ -1,0 +1,49 @@
+<project name="symja-parser" basedir="." default="main">
+	<tstamp>
+		<format property="date" pattern="yyyy-MM-dd" />
+	</tstamp>
+
+	<property file="build.properties" />
+
+	<property name="src.dir" value="${src.includes}" /> 
+
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="doc.dir" value="${build.dir}/javadoc" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+
+	<property name="main-class" value="org.matheclipse.parser.util.Console" />
+
+	<property name="lib.dir" value="lib" />
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+
+	<target name="clean" description="Delete the &quot;/build/..&quot; target subdirectory">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="compile" description="Compile the Symja Parser sources to subdirectory &quot;/build/classes&quot;" depends="clean">
+		<mkdir dir="${classes.dir}" />
+		<copy file="src/main/java/META-INF/MANIFEST.MF" todir="${classes.dir}/META-INF" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" source="1.7" target="1.7" debug="true" includeantruntime="false" />
+	</target>
+
+	<!-- Generate javadocs for current project into ${doc.dir} -->
+	<target name="doc" depends="compile" description="Generate Javadoc documentation in subdirectory &quot;/build/javadoc&quot;">
+		<javadoc sourcepath="${src.dir}" encoding="utf-8" packagenames="org.matheclipse.parser.*" destdir="${doc.dir}" />
+	</target>
+
+	<target name="jar" description="Create full &quot;/build/jar/symja-parserYYYY-MM-DD.jar&quot; file for download" depends="doc">
+		<mkdir dir="${jar.dir}" /> 
+		<jar manifest="${classes.dir}/META-INF/MANIFEST.MF" destfile="${jar.dir}/symja-parser${date}.jar" basedir="${classes.dir}">
+
+		</jar>
+	</target>
+
+	<target name="main" description="Run ANT targets clean and jar" depends="clean,jar" />
+
+</project>
+

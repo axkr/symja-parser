@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.complex.ComplexField;
-import org.apache.commons.math3.dfp.Dfp;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;

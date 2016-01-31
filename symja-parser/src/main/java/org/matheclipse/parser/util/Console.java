@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matheclipse.parser.server.util;
+package org.matheclipse.parser.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,7 +32,8 @@ import org.matheclipse.parser.client.eval.ComplexEvaluator;
 import org.matheclipse.parser.client.eval.DoubleEvaluator;
 
 /**
- * A java console program to run the DoubleEvaluator and ComplexEvaluator numerical evaluators interactivly.
+ * A java console program to run the DoubleEvaluator and ComplexEvaluator
+ * numerical evaluators interactivly.
  *
  * @see DoubleEvaluator
  * @see ComplexEvaluator
@@ -164,7 +165,8 @@ public class Console {
 	}
 
 	/**
-	 * Evaluates the given string-expression and returns the result in <code>OutputForm</code>
+	 * Evaluates the given string-expression and returns the result in
+	 * <code>OutputForm</code>
 	 * 
 	 * @param strEval
 	 * 
@@ -172,16 +174,16 @@ public class Console {
 	public String interpreter(final String strEval) {
 		try {
 			if (fComplexEvaluatorMode) {
-				Parser p = new Parser();
+				ComplexEvaluator engine = new ComplexEvaluator(true);
+				Parser p = new Parser(engine.isRelaxedSyntax());
 				ASTNode obj = p.parse(strEval);
-				ComplexEvaluator engine = new ComplexEvaluator();
 				if (obj instanceof FunctionNode) {
 					obj = engine.optimizeFunction((FunctionNode) obj);
 				}
 				Complex c = engine.evaluateNode(obj);
 				return ComplexEvaluator.toString(c);
 			} else {
-				DoubleEvaluator engine = new DoubleEvaluator();
+				DoubleEvaluator engine = new DoubleEvaluator(true);
 				double d = engine.evaluate(strEval);
 				return Double.toString(d);
 			}
