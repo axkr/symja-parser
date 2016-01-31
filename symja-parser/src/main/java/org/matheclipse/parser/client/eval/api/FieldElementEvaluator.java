@@ -49,7 +49,7 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 
 	/**
 	 * Evaluate an already parsed in abstract syntax tree node into a
-	 * <code>DATA</code> value.
+	 * <code>T</code> value.
 	 * 
 	 * @param node
 	 *            abstract syntax tree node
@@ -61,9 +61,22 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 		return evaluateNode(node, null);
 	}
 
-	public T evaluateNode(ASTNode node, T data) {
+	/**
+	 * Evaluate an already parsed in abstract syntax tree node into a
+	 * <code>T</code> value.
+	 * 
+	 * @param node
+	 *            abstract syntax tree node
+	 * @param value
+	 *            an initial value for the node visitors <code>setup()</code>
+	 *            method.
+	 * 
+	 * @return the evaluated Complex number
+	 * 
+	 */
+	public T evaluateNode(ASTNode node, T value) {
 		try {
-			fVisitor.setUp(data);
+			fVisitor.setUp(value);
 			return fVisitor.evaluateNode(node);
 		} finally {
 			fVisitor.tearDown();

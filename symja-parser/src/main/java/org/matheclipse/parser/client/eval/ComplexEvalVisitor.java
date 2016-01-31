@@ -15,7 +15,6 @@
  */
 package org.matheclipse.parser.client.eval;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,8 +30,18 @@ import org.matheclipse.parser.client.ast.StringNode;
 import org.matheclipse.parser.client.ast.SymbolNode;
 import org.matheclipse.parser.client.eval.api.AbstractASTVisitor;
 import org.matheclipse.parser.client.eval.api.FieldElementVariable;
+import org.matheclipse.parser.client.eval.api.IBooleanBoolean1Function;
+import org.matheclipse.parser.client.eval.api.IBooleanBoolean2Function;
+import org.matheclipse.parser.client.eval.api.IBooleanFieldElement2Function;
+import org.matheclipse.parser.client.eval.api.IBooleanFunction;
 import org.matheclipse.parser.client.eval.api.IEvaluator;
-import org.matheclipse.parser.client.math.ArithmeticMathException;
+import org.matheclipse.parser.client.eval.api.IFieldElement0Function;
+import org.matheclipse.parser.client.eval.api.IFieldElement1Function;
+import org.matheclipse.parser.client.eval.api.IFieldElement2Function;
+import org.matheclipse.parser.client.eval.api.IFieldElementFunction;
+import org.matheclipse.parser.client.eval.api.IFieldElementFunctionNode;
+import org.matheclipse.parser.client.eval.api.function.CompoundExpressionFunction;
+import org.matheclipse.parser.client.eval.api.function.SetFunction;
 import org.matheclipse.parser.client.math.MathException;
 
 /**
@@ -42,26 +51,23 @@ import org.matheclipse.parser.client.math.MathException;
  */
 public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 
-	public final static boolean DEBUG = false;
-
 	// private static double EPSILON = 1.0e-15;
+	private static Map<String, IBooleanFunction> FUNCTION_BOOLEAN_MAP;
 
 	private static Map<String, Complex> SYMBOL_MAP;
 
 	private static Map<String, Boolean> SYMBOL_BOOLEAN_MAP;
 
-	private static Map<String, Object> FUNCTION_MAP;
+	private static Map<String, IFieldElementFunction> FUNCTION_MAP;
 
-	private static Map<String, Object> FUNCTION_BOOLEAN_MAP;
-
-	static class ArcTanFunction implements IComplex1Function {
+	static class ArcTanFunction implements IFieldElement1Function<Complex> {
 		public Complex evaluate(Complex arg1) {
 			return arg1.atan();// ComplexUtils.atan(arg1);
 		}
 
 	}
 
-	static class LogFunction implements IComplex1Function, IComplex2Function {
+	static class LogFunction implements IFieldElement1Function<Complex>, IFieldElement2Function<Complex> {
 		public Complex evaluate(Complex arg1) {
 			return arg1.log();// ComplexUtils.log(arg1);
 		}
@@ -71,45 +77,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		}
 	}
 
-	static class CompoundExpressionFunction implements IComplexFunction {
-		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
-			Complex result = null;
-			int end = function.size();
-			for (int i = 1; i < end; i++) {
-				result = engine.evaluateNode(function.getNode(i));
-				if (DEBUG) {
-					System.out.println(result);
-				}
-			}
-			return result;
-		}
-	}
-
-	static class SetFunction implements IComplexFunction {
-		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
-			if (function.size() != 3) {
-				throw new ArithmeticMathException(
-						"SetFunction#evaluate(DoubleEvaluator,FunctionNode) needs 2 arguments: " + function.toString());
-			}
-			if (!(function.getNode(1) instanceof SymbolNode)) {
-				throw new ArithmeticMathException(
-						"SetFunction#evaluate(DoubleEvaluator,FunctionNode) symbol required on the left hand side: "
-								+ function.toString());
-			}
-			String variableName = ((SymbolNode) function.getNode(1)).getString();
-			Complex result = engine.evaluateNode(function.getNode(2));
-			FieldElementVariable<Complex> dv = engine.getVariable(variableName);
-			if (dv == null) {
-				dv = new ComplexVariable(result);
-			} else {
-				dv.setValue(result);
-			}
-			engine.defineVariable(variableName, dv);
-			return result;
-		}
-	}
-
-	static class PlusFunction implements IComplexFunction, IComplex2Function {
+	static class PlusFunction implements IFieldElementFunctionNode<Complex>, IFieldElement2Function<Complex> {
 		public Complex evaluate(Complex arg1, Complex arg2) {
 			return arg1.add(arg2);
 		}
@@ -123,7 +91,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		}
 	}
 
-	static class TimesFunction implements IComplexFunction, IComplex2Function {
+	static class TimesFunction implements IFieldElementFunctionNode<Complex>, IFieldElement2Function<Complex> {
 		public Complex evaluate(Complex arg1, Complex arg2) {
 			return arg1.multiply(arg2);
 		}
@@ -138,22 +106,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	}
 
 	static {
-		SYMBOL_MAP = new ConcurrentHashMap<String, Complex>();
-		SYMBOL_MAP.put("Catalan", new Complex(0.91596559417721901505460351493238411077414937428167, 0.0));
-		SYMBOL_MAP.put("Degree", new Complex(Math.PI / 180, 0.0));
-		SYMBOL_MAP.put("E", new Complex(Math.E, 0.0));
-		SYMBOL_MAP.put("I", new Complex(0.0, 1.0));
-		SYMBOL_MAP.put("Pi", new Complex(Math.PI, 0.0));
-		SYMBOL_MAP.put("EulerGamma", new Complex(0.57721566490153286060651209008240243104215933593992, 0.0));
-		SYMBOL_MAP.put("Glaisher", new Complex(1.2824271291006226368753425688697917277676889273250, 0.0));
-		SYMBOL_MAP.put("GoldenRatio", new Complex(1.6180339887498948482045868343656381177203091798058, 0.0));
-		SYMBOL_MAP.put("Khinchin", new Complex(2.6854520010653064453097148354817956938203822939945, 0.0));
-
-		SYMBOL_BOOLEAN_MAP = new ConcurrentHashMap<String, Boolean>();
-		SYMBOL_BOOLEAN_MAP.put("False", Boolean.FALSE);
-		SYMBOL_BOOLEAN_MAP.put("True", Boolean.TRUE);
-
-		FUNCTION_BOOLEAN_MAP = new ConcurrentHashMap<String, Object>();
+		FUNCTION_BOOLEAN_MAP = new ConcurrentHashMap<String, IBooleanFunction>();
 
 		FUNCTION_BOOLEAN_MAP.put("And", new IBooleanBoolean2Function() {
 			public boolean evaluate(boolean arg1, boolean arg2) {
@@ -171,29 +124,44 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 			}
 		});
 
-		FUNCTION_BOOLEAN_MAP.put("Equal", new IBooleanComplex2Function() {
+		FUNCTION_BOOLEAN_MAP.put("Equal", new IBooleanFieldElement2Function<Complex>() {
 			public boolean evaluate(Complex arg1, Complex arg2) {
 				return arg1.equals(arg2);
 			}
 		});
 
-		FUNCTION_BOOLEAN_MAP.put("Unequal", new IBooleanComplex2Function() {
+		FUNCTION_BOOLEAN_MAP.put("Unequal", new IBooleanFieldElement2Function<Complex>() {
 			public boolean evaluate(Complex arg1, Complex arg2) {
 				return !arg1.equals(arg2);
 			}
 		});
 
-		FUNCTION_MAP = new ConcurrentHashMap<String, Object>();
+		SYMBOL_MAP = new ConcurrentHashMap<String, Complex>();
+		SYMBOL_MAP.put("Catalan", new Complex(0.91596559417721901505460351493238411077414937428167, 0.0));
+		SYMBOL_MAP.put("Degree", new Complex(Math.PI / 180, 0.0));
+		SYMBOL_MAP.put("E", new Complex(Math.E, 0.0));
+		SYMBOL_MAP.put("I", new Complex(0.0, 1.0));
+		SYMBOL_MAP.put("Pi", new Complex(Math.PI, 0.0));
+		SYMBOL_MAP.put("EulerGamma", new Complex(0.57721566490153286060651209008240243104215933593992, 0.0));
+		SYMBOL_MAP.put("Glaisher", new Complex(1.2824271291006226368753425688697917277676889273250, 0.0));
+		SYMBOL_MAP.put("GoldenRatio", new Complex(1.6180339887498948482045868343656381177203091798058, 0.0));
+		SYMBOL_MAP.put("Khinchin", new Complex(2.6854520010653064453097148354817956938203822939945, 0.0));
+
+		SYMBOL_BOOLEAN_MAP = new ConcurrentHashMap<String, Boolean>();
+		SYMBOL_BOOLEAN_MAP.put("False", Boolean.FALSE);
+		SYMBOL_BOOLEAN_MAP.put("True", Boolean.TRUE);
+
+		FUNCTION_MAP = new ConcurrentHashMap<String, IFieldElementFunction>();
 		FUNCTION_MAP.put("ArcTan", new ArcTanFunction());
 		FUNCTION_MAP.put("Log", new LogFunction());
-		FUNCTION_MAP.put("CompoundExpression", new CompoundExpressionFunction());
-		FUNCTION_MAP.put("Set", new SetFunction());
+		FUNCTION_MAP.put("CompoundExpression", new CompoundExpressionFunction<Complex>());
+		FUNCTION_MAP.put("Set", new SetFunction<Complex>());
 		FUNCTION_MAP.put("Plus", new PlusFunction());
 		FUNCTION_MAP.put("Times", new TimesFunction());
 		//
 		// Functions with 0 argument
 		//
-		FUNCTION_MAP.put("Random", new IComplex0Function() {
+		FUNCTION_MAP.put("Random", new IFieldElement0Function<Complex>() {
 			public Complex evaluate() {
 				return new Complex(Math.random(), Math.random());
 			}
@@ -201,58 +169,58 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		//
 		// Functions with 1 argument
 		//
-		FUNCTION_MAP.put("Abs", new IComplex1Function() {
+		FUNCTION_MAP.put("Abs", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return new Complex(arg1.abs());
 			}
 		});
-		FUNCTION_MAP.put("ArcCos", new IComplex1Function() {
+		FUNCTION_MAP.put("ArcCos", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.acos();// acos(arg1);
 			}
 		});
-		FUNCTION_MAP.put("ArcSin", new IComplex1Function() {
+		FUNCTION_MAP.put("ArcSin", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.asin();// asin(arg1);
 			}
 		});
 
-		FUNCTION_MAP.put("Cos", new IComplex1Function() {
+		FUNCTION_MAP.put("Cos", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.cos();// cos(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Cosh", new IComplex1Function() {
+		FUNCTION_MAP.put("Cosh", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.cosh();// cosh(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Exp", new IComplex1Function() {
+		FUNCTION_MAP.put("Exp", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.exp();// exp(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Sin", new IComplex1Function() {
+		FUNCTION_MAP.put("Sin", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.sin();// sin(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Sinh", new IComplex1Function() {
+		FUNCTION_MAP.put("Sinh", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.sinh();// sinh(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Sqrt", new IComplex1Function() {
+		FUNCTION_MAP.put("Sqrt", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.sqrt();// sqrt(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Tan", new IComplex1Function() {
+		FUNCTION_MAP.put("Tan", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.tan();// tan(arg1);
 			}
 		});
-		FUNCTION_MAP.put("Tanh", new IComplex1Function() {
+		FUNCTION_MAP.put("Tanh", new IFieldElement1Function<Complex>() {
 			public Complex evaluate(Complex arg1) {
 				return arg1.tanh();// tanh(arg1);
 			}
@@ -261,7 +229,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		//
 		// Functions with 2 arguments
 		//
-		FUNCTION_MAP.put("Power", new IComplex2Function() {
+		FUNCTION_MAP.put("Power", new IFieldElement2Function<Complex>() {
 			public Complex evaluate(Complex arg1, Complex arg2) {
 				if (arg1.equals(Complex.ZERO) && !arg2.equals(Complex.ZERO)) {
 					return Complex.ZERO;
@@ -271,16 +239,12 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		});
 	}
 
-	private Map<String, FieldElementVariable<Complex> > fVariableMap;
-
-	private Map<String, BooleanVariable> fBooleanVariables;
-
-	private final boolean fRelaxedSyntax;
+	public ComplexEvalVisitor() {
+		this(true);
+	}
 
 	public ComplexEvalVisitor(boolean relaxedSyntax) {
-		fVariableMap = new HashMap<String, FieldElementVariable<Complex>>();
-		fBooleanVariables = new HashMap<String, BooleanVariable>();
-		fRelaxedSyntax = relaxedSyntax;
+		super(relaxedSyntax);
 		if (fRelaxedSyntax) {
 			if (SYMBOL_MAP.get("pi") == null) {
 				// init tables for relaxed mode
@@ -300,11 +264,8 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		}
 	}
 
-	public Complex getResult() {
-		return null;
-	}
-
 	public void setUp(Complex data) {
+		super.setUp(data);
 	}
 
 	public void tearDown() {
@@ -324,47 +285,6 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 
 	public Complex visit(FractionNode node) {
 		return new Complex(node.doubleValue(), 0.0);
-	}
-
-	public Complex visit(FunctionNode functionNode) {
-		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
-			String symbol = functionNode.getNode(0).toString();
-			if (symbol.equals("If") || (fRelaxedSyntax && symbol.equalsIgnoreCase("If"))) {
-				if (functionNode.size() == 3) {
-					if (evaluateNodeLogical(functionNode.getNode(1))) {
-						return evaluateNode(functionNode.getNode(2));
-					}
-				} else if (functionNode.size() == 4) {
-					if (evaluateNodeLogical(functionNode.getNode(1))) {
-						return evaluateNode(functionNode.getNode(2));
-					} else {
-						return evaluateNode(functionNode.getNode(3));
-					}
-				}
-			} else {
-				Object obj = FUNCTION_MAP.get(symbol);
-				if (obj instanceof IComplexFunction) {
-					return ((IComplexFunction) obj).evaluate(this, functionNode);
-				}
-				if (functionNode.size() == 1) {
-					if (obj instanceof IComplex0Function) {
-						return ((IComplex0Function) obj).evaluate();
-					}
-				} else if (functionNode.size() == 2) {
-					if (obj instanceof IComplex1Function) {
-						return ((IComplex1Function) obj).evaluate(evaluateNode(functionNode.getNode(1)));
-					}
-				} else if (functionNode.size() == 3) {
-					if (obj instanceof IComplex2Function) {
-						return ((IComplex2Function) obj).evaluate(evaluateNode(functionNode.getNode(1)),
-								evaluateNode(functionNode.getNode(2)));
-					}
-				}
-			}
-		}
-		throw new MathException(
-				"EvalDouble#evaluateFunction(FunctionNode) not possible for: " + functionNode.toString());
-
 	}
 
 	public Complex visit(IntegerNode node) {
@@ -391,79 +311,6 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		throw new MathException("ComplexEvalVisitor#visit(SymbolNode) not possible for: " + node.toString());
 	}
 
-	public boolean evaluateNodeLogical(final ASTNode node) {
-		if (node instanceof FunctionNode) {
-			return evaluateFunctionLogical((FunctionNode) node);
-		}
-		if (node instanceof SymbolNode) {
-			BooleanVariable v = fBooleanVariables.get(node.toString());
-			if (v != null) {
-				return v.getValue();
-			}
-			Boolean boole = SYMBOL_BOOLEAN_MAP.get(node.toString());
-			if (boole != null) {
-				return boole.booleanValue();
-			}
-		}
-
-		throw new ArithmeticMathException(
-				"EvalDouble#evaluateNodeLogical(ASTNode) not possible for: " + node.toString());
-	}
-
-	public boolean evaluateFunctionLogical(final FunctionNode functionNode) {
-		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
-			String symbol = functionNode.getNode(0).toString();
-			if (functionNode.size() == 2) {
-				Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
-				if (obj instanceof IBooleanBoolean1Function) {
-					return ((IBooleanBoolean1Function) obj).evaluate(evaluateNodeLogical(functionNode.getNode(1)));
-				}
-			} else if (functionNode.size() == 3) {
-				Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
-				if (obj instanceof IBooleanComplex2Function) {
-					return ((IBooleanComplex2Function) obj).evaluate(evaluateNode(functionNode.getNode(1)),
-							evaluateNode(functionNode.getNode(2)));
-				} else if (obj instanceof IBooleanBoolean2Function) {
-					return ((IBooleanBoolean2Function) obj).evaluate(evaluateNodeLogical(functionNode.getNode(1)),
-							evaluateNodeLogical(functionNode.getNode(2)));
-				}
-				// } else {
-				// Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
-				// if (obj instanceof IBooleanDoubleFunction) {
-				// return ((IBooleanDoubleFunction) obj).evaluate(this,
-				// functionNode);
-				// }
-			}
-		}
-		throw new ArithmeticMathException(
-				"EvalDouble#evaluateFunctionLogical(FunctionNode) not possible for: " + functionNode.toString());
-
-	}
-
-	/**
-	 * Returns a <code>String</code> representation of the given
-	 * <code>Complex</code> number.
-	 * 
-	 * @param c
-	 * @return
-	 * 
-	 */
-	// public static String toString(Complex c) {
-	// double real = c.getReal();
-	// double imag = c.getImaginary();
-	// if (imag == 0.0) {
-	// return Double.valueOf(real).toString();
-	// } else {
-	// if (imag >= 0.0) {
-	// return Double.valueOf(real).toString() + "+I*" +
-	// Double.valueOf(imag).toString();
-	// } else {
-	// return Double.valueOf(real).toString() + "+I*(" +
-	// Double.valueOf(imag).toString() + ")";
-	// }
-	// }
-	// }
-
 	/**
 	 * Define a value for a given variable name.
 	 * 
@@ -473,6 +320,10 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	@Override
 	public void defineVariable(String variableName, FieldElementVariable<Complex> value) {
 		fVariableMap.put(variableName, value);
+	}
+
+	public FieldElementVariable<Complex> createVariable(Complex value) {
+		return new ComplexVariable(value);
 	}
 
 	/**
@@ -485,6 +336,18 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	 */
 	public FieldElementVariable<Complex> getVariable(String variableName) {
 		return fVariableMap.get(variableName);
+	}
+
+	public IFieldElementFunction getFunctionMap(String symbolName) {
+		return FUNCTION_MAP.get(symbolName);
+	}
+
+	public IBooleanFunction getFunctionBooleanMap(String symbolName) {
+		return FUNCTION_BOOLEAN_MAP.get(symbolName);
+	}
+
+	public Boolean getSymbolBooleanMap(String symbolName) {
+		return SYMBOL_BOOLEAN_MAP.get(symbolName);
 	}
 
 	/**

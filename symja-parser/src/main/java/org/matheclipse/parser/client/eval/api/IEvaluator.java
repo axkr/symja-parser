@@ -74,7 +74,15 @@ public interface IEvaluator<T extends FieldElement<T>> {
 	 * @param variableName
 	 * @return
 	 */
-	public FieldElementVariable<T>  getVariable(String variableName);
+	public FieldElementVariable<T> getVariable(String variableName);
+
+	/**
+	 * Returns a new data variable instance.
+	 * 
+	 * @param variableName
+	 * @return
+	 */
+	public FieldElementVariable<T> createVariable(T value);
 
 	/**
 	 * Optimize an already parsed in <code>functionNode</code> into an

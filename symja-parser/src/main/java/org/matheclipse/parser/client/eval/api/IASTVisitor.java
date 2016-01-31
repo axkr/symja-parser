@@ -31,17 +31,20 @@ import org.matheclipse.parser.client.eval.DoubleNode;
  * the parser.
  * 
  * @param <USER_DATA_TYPE>
- *          a user-defined data type
+ *            a user-defined data type
  */
 public interface IASTVisitor<T extends FieldElement<T>> extends IEvaluator<T> {
 	/**
 	 * Before a visitor run starts this method will be called.
+	 * 
+	 * @param value
+	 *            an initial value which maybe <code>null</code>.
 	 */
-	public void setUp(T data);
+	public void setUp(T value);
 
 	/**
-	 * After a visitor run has finished this method will be called. Typically this
-	 * method will be called before the getResult() method.
+	 * After a visitor run has finished this method will be called. Typically
+	 * this method will be called before the getResult() method.
 	 */
 	public void tearDown();
 

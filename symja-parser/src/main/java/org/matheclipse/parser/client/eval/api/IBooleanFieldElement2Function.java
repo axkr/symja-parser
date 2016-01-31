@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matheclipse.parser.client.eval;
+package org.matheclipse.parser.client.eval.api;
 
-import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.FieldElement;
 
-public interface IBooleanComplex2Function {
-	public boolean evaluate(Complex arg1, Complex arg2);
+public interface IBooleanFieldElement2Function<T extends FieldElement<T>> extends IBooleanFunction {
+	public boolean evaluate(T arg1, T arg2);
 }

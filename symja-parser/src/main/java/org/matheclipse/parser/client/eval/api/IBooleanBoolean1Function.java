@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matheclipse.parser.client.eval;
+package org.matheclipse.parser.client.eval.api;
 
-import org.apache.commons.math3.complex.Complex;
-import org.matheclipse.parser.client.ast.FunctionNode;
-import org.matheclipse.parser.client.eval.api.IEvaluator;
-
-public interface IComplexFunction {
-  public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function);
+public interface IBooleanBoolean1Function extends IBooleanFunction {
+	public boolean evaluate(boolean arg1);
 }

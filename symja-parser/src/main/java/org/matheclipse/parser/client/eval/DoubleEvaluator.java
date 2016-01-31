@@ -26,6 +26,8 @@ import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FunctionNode;
 import org.matheclipse.parser.client.ast.NumberNode;
 import org.matheclipse.parser.client.ast.SymbolNode;
+import org.matheclipse.parser.client.eval.api.IBooleanBoolean1Function;
+import org.matheclipse.parser.client.eval.api.IBooleanBoolean2Function;
 import org.matheclipse.parser.client.math.ArithmeticMathException;
 import org.matheclipse.parser.client.operator.ASTNodeFactory;
 

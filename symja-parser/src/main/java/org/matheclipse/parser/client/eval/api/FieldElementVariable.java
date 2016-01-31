@@ -2,13 +2,9 @@ package org.matheclipse.parser.client.eval.api;
 
 import org.apache.commons.math3.FieldElement;
 
-public class FieldElementVariable<T extends FieldElement<T>> {
+public abstract class FieldElementVariable<T extends FieldElement<T>> {
 
 	protected T value;
-
-	public FieldElementVariable() {
-		super();
-	}
 
 	public T getValue() {
 		return value;

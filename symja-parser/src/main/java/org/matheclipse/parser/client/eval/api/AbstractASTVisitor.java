@@ -15,6 +15,9 @@
  */
 package org.matheclipse.parser.client.eval.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
@@ -25,52 +28,67 @@ import org.matheclipse.parser.client.ast.NumberNode;
 import org.matheclipse.parser.client.ast.PatternNode;
 import org.matheclipse.parser.client.ast.StringNode;
 import org.matheclipse.parser.client.ast.SymbolNode;
+import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.eval.ComplexNode;
 import org.matheclipse.parser.client.eval.DoubleNode;
+import org.matheclipse.parser.client.math.ArithmeticMathException;
+import org.matheclipse.parser.client.math.MathException;
 
 /**
  * Abstract AST visitor with empty default method implementations.
  * 
- * @param <USER_DATA_TYPE>
+ * @param <T>
  */
-public abstract class AbstractASTVisitor<DATA extends FieldElement<DATA>>
-		implements IASTVisitor<DATA> {
+public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements IASTVisitor<T> {
+	public final static boolean DEBUG = false;
 
-	public void setUp(DATA data) {
+	protected Map<String, FieldElementVariable<T>> fVariableMap;
+
+	protected Map<String, BooleanVariable> fBooleanVariables;
+
+	protected final boolean fRelaxedSyntax;
+
+	public AbstractASTVisitor(boolean relaxedSyntax) {
+		fRelaxedSyntax = relaxedSyntax;
+		fVariableMap = new HashMap<String, FieldElementVariable<T>>();
+		fBooleanVariables = new HashMap<String, BooleanVariable>();
+	}
+
+	public void setUp(T data) {
 	}
 
 	public void tearDown() {
 	}
 
-	public DATA visit(ComplexNode node) {
+	public T visit(ComplexNode node) {
 		return null;
 	}
 
-	public DATA visit(DoubleNode node) {
+	public T visit(DoubleNode node) {
 		return null;
 	}
 
-	public DATA visit(FloatNode node) {
+	public T visit(FloatNode node) {
 		return null;
 	}
 
-	public DATA visit(FractionNode node) {
+	public T visit(FractionNode node) {
 		return null;
 	}
 
-	public DATA visit(IntegerNode node) {
+	public T visit(IntegerNode node) {
 		return null;
 	}
 
-	public DATA visit(PatternNode node) {
+	public T visit(PatternNode node) {
 		return null;
 	}
 
-	public DATA visit(StringNode node) {
+	public T visit(StringNode node) {
 		return null;
 	}
 
-	public DATA visit(SymbolNode node) {
+	public T visit(SymbolNode node) {
 		return null;
 	}
 
@@ -84,7 +102,7 @@ public abstract class AbstractASTVisitor<DATA extends FieldElement<DATA>>
 	 * @return the evaluated value
 	 * 
 	 */
-	public DATA evaluateNode(ASTNode node) {
+	public T evaluateNode(ASTNode node) {
 		if (node instanceof DoubleNode) {
 			return visit((DoubleNode) node);
 		}
@@ -117,4 +135,99 @@ public abstract class AbstractASTVisitor<DATA extends FieldElement<DATA>>
 		return null;
 	}
 
+	abstract public IFieldElementFunction getFunctionMap(String symbolName);
+
+	abstract public IBooleanFunction getFunctionBooleanMap(String symbolName);
+
+	abstract public Boolean getSymbolBooleanMap(String symbolName);
+
+	public boolean evaluateFunctionLogical(final FunctionNode functionNode) {
+		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
+			String symbol = functionNode.getNode(0).toString();
+			if (functionNode.size() == 2) {
+				IBooleanFunction function = getFunctionBooleanMap(symbol);
+				if (function instanceof IBooleanBoolean1Function) {
+					return ((IBooleanBoolean1Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)));
+				}
+			} else if (functionNode.size() == 3) {
+				IBooleanFunction function = getFunctionBooleanMap(symbol);
+				if (function instanceof IBooleanFieldElement2Function) {
+					return ((IBooleanFieldElement2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
+							evaluateNode(functionNode.getNode(2)));
+				} else if (function instanceof IBooleanBoolean2Function) {
+					return ((IBooleanBoolean2Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)),
+							evaluateNodeLogical(functionNode.getNode(2)));
+				}
+				// } else {
+				// Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
+				// if (obj instanceof IBooleanDoubleFunction) {
+				// return ((IBooleanDoubleFunction) obj).evaluate(this,
+				// functionNode);
+				// }
+			}
+		}
+		throw new ArithmeticMathException("AbstractASTVisitor#evaluateFunctionLogical(FunctionNode) not possible for: "
+				+ functionNode.toString());
+
+	}
+
+	public boolean evaluateNodeLogical(final ASTNode node) {
+		if (node instanceof FunctionNode) {
+			return evaluateFunctionLogical((FunctionNode) node);
+		}
+		if (node instanceof SymbolNode) {
+			BooleanVariable v = fBooleanVariables.get(node.toString());
+			if (v != null) {
+				return v.getValue();
+			}
+			Boolean boole = getSymbolBooleanMap(node.toString());
+			if (boole != null) {
+				return boole.booleanValue();
+			}
+		}
+
+		throw new ArithmeticMathException(
+				"AbstractASTVisitor#evaluateNodeLogical(ASTNode) not possible for: " + node.toString());
+	}
+
+	public T visit(FunctionNode functionNode) {
+		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
+			String symbol = functionNode.getNode(0).toString();
+			if (symbol.equals("If") || (fRelaxedSyntax && symbol.equalsIgnoreCase("If"))) {
+				if (functionNode.size() == 3) {
+					if (evaluateNodeLogical(functionNode.getNode(1))) {
+						return evaluateNode(functionNode.getNode(2));
+					}
+				} else if (functionNode.size() == 4) {
+					if (evaluateNodeLogical(functionNode.getNode(1))) {
+						return evaluateNode(functionNode.getNode(2));
+					} else {
+						return evaluateNode(functionNode.getNode(3));
+					}
+				}
+			} else {
+				IFieldElementFunction function = getFunctionMap(symbol);
+				if (function instanceof IFieldElementFunctionNode) {
+					return ((IFieldElementFunctionNode<T>) function).evaluate(this, functionNode);
+				}
+				if (functionNode.size() == 1) {
+					if (function instanceof IFieldElement0Function) {
+						return ((IFieldElement0Function<T>) function).evaluate();
+					}
+				} else if (functionNode.size() == 2) {
+					if (function instanceof IFieldElement1Function) {
+						return ((IFieldElement1Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)));
+					}
+				} else if (functionNode.size() == 3) {
+					if (function instanceof IFieldElement2Function) {
+						return ((IFieldElement2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
+								evaluateNode(functionNode.getNode(2)));
+					}
+				}
+			}
+		}
+		throw new MathException(
+				"AbstractASTVisitor#evaluateFunction(FunctionNode) not possible for: " + functionNode.toString());
+
+	}
 }

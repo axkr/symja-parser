@@ -23,14 +23,14 @@ public class ComplexVariable extends FieldElementVariable<Complex> {
 		value = new Complex(v, 0.0);
 	}
 
-	public ComplexVariable(Complex v) {
-		value = v;
+	public ComplexVariable(Complex c) {
+		value = c;
 	}
 
 	public void setValue(double real) {
 		this.value = new Complex(real, 0.0);
 	}
-	
+
 	public void setValue(double real, double imaginary) {
 		this.value = new Complex(real, imaginary);
 	}

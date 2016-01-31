@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matheclipse.parser.client.eval;
+package org.matheclipse.parser.client.eval.api;
 
-
-public interface IBooleanBoolean1Function {
-  public boolean evaluate(boolean arg1);
+public interface IBooleanBoolean2Function extends IBooleanFunction {
+	public boolean evaluate(boolean arg1, boolean arg2);
 }
