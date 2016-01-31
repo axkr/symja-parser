@@ -22,7 +22,7 @@ package org.matheclipse.parser.client.ast;
 public class IntegerNode extends NumberNode {
 	public final static IntegerNode C1 = new IntegerNode("1", 10);
 
-	private final int fNumberFormat; 
+	private final int fNumberFormat;
 
 	private final int fIntValue;
 
@@ -59,7 +59,10 @@ public class IntegerNode extends NumberNode {
 		return fNumberFormat;
 	}
 
-	public int getIntValue() {
+	public int getIntValue() throws NumberFormatException {
+		if (fIntValue == 0) {
+			return Integer.parseInt(fStringValue, fNumberFormat);
+		}
 		return fIntValue;
 	}
 

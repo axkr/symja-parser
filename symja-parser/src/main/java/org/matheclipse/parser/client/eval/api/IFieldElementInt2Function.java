@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2014 Axel Kramer (axelclk@gmail.com)
+ * Copyright 2005-2008 Axel Kramer (axelclk@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matheclipse.parser.client.eval.dfp;
+package org.matheclipse.parser.client.eval.api;
 
-import org.apache.commons.math3.dfp.Dfp;
+import org.apache.commons.math3.FieldElement;
 
-
-public interface IBooleanDfp2Function {
-  public boolean evaluate(Dfp arg1, Dfp arg2);
+public interface IFieldElementInt2Function<T extends FieldElement<T>> extends IFieldElement2Function<T> {
+	public T evaluate(T arg1, int n);
 }

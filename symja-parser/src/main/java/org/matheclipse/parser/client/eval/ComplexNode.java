@@ -45,10 +45,12 @@ public class ComplexNode extends ASTNode {
 		return value;
 	}
 
+	@Override
 	public String toString() {
 		return ComplexEvaluator.toString(value);
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -59,6 +61,7 @@ public class ComplexNode extends ASTNode {
 		return false;
 	}
 
+	@Override
 	public int hashCode() {
 		long rbits = MathUtils.hash(value.getReal());// Double.doubleToLongBits(value.getReal());
 		long ibits = MathUtils.hash(value.getImaginary());// Double.doubleToLongBits(value.getImaginary());

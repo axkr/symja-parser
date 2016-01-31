@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.math3.FieldElement;
+import org.apache.commons.math3.dfp.Dfp;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;
@@ -54,42 +55,34 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 		fBooleanVariables = new HashMap<String, BooleanVariable>();
 	}
 
-	public void setUp(T data) {
-	}
+	public boolean evaluateFunctionLogical(final FunctionNode functionNode) {
+		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
+			String symbol = functionNode.getNode(0).toString();
+			if (functionNode.size() == 2) {
+				IBooleanFunction function = getFunctionBooleanMap(symbol);
+				if (function instanceof IBooleanBoolean1Function) {
+					return ((IBooleanBoolean1Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)));
+				}
+			} else if (functionNode.size() == 3) {
+				IBooleanFunction function = getFunctionBooleanMap(symbol);
+				if (function instanceof IBooleanFieldElement2Function) {
+					return ((IBooleanFieldElement2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
+							evaluateNode(functionNode.getNode(2)));
+				} else if (function instanceof IBooleanBoolean2Function) {
+					return ((IBooleanBoolean2Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)),
+							evaluateNodeLogical(functionNode.getNode(2)));
+				}
+				// } else {
+				// Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
+				// if (obj instanceof IBooleanDoubleFunction) {
+				// return ((IBooleanDoubleFunction) obj).evaluate(this,
+				// functionNode);
+				// }
+			}
+		}
+		throw new ArithmeticMathException("AbstractASTVisitor#evaluateFunctionLogical(FunctionNode) not possible for: "
+				+ functionNode.toString());
 
-	public void tearDown() {
-	}
-
-	public T visit(ComplexNode node) {
-		return null;
-	}
-
-	public T visit(DoubleNode node) {
-		return null;
-	}
-
-	public T visit(FloatNode node) {
-		return null;
-	}
-
-	public T visit(FractionNode node) {
-		return null;
-	}
-
-	public T visit(IntegerNode node) {
-		return null;
-	}
-
-	public T visit(PatternNode node) {
-		return null;
-	}
-
-	public T visit(StringNode node) {
-		return null;
-	}
-
-	public T visit(SymbolNode node) {
-		return null;
 	}
 
 	/**
@@ -102,6 +95,7 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 	 * @return the evaluated value
 	 * 
 	 */
+	@Override
 	public T evaluateNode(ASTNode node) {
 		if (node instanceof DoubleNode) {
 			return visit((DoubleNode) node);
@@ -135,42 +129,6 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 		return null;
 	}
 
-	abstract public IFieldElementFunction getFunctionMap(String symbolName);
-
-	abstract public IBooleanFunction getFunctionBooleanMap(String symbolName);
-
-	abstract public Boolean getSymbolBooleanMap(String symbolName);
-
-	public boolean evaluateFunctionLogical(final FunctionNode functionNode) {
-		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
-			String symbol = functionNode.getNode(0).toString();
-			if (functionNode.size() == 2) {
-				IBooleanFunction function = getFunctionBooleanMap(symbol);
-				if (function instanceof IBooleanBoolean1Function) {
-					return ((IBooleanBoolean1Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)));
-				}
-			} else if (functionNode.size() == 3) {
-				IBooleanFunction function = getFunctionBooleanMap(symbol);
-				if (function instanceof IBooleanFieldElement2Function) {
-					return ((IBooleanFieldElement2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
-							evaluateNode(functionNode.getNode(2)));
-				} else if (function instanceof IBooleanBoolean2Function) {
-					return ((IBooleanBoolean2Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)),
-							evaluateNodeLogical(functionNode.getNode(2)));
-				}
-				// } else {
-				// Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
-				// if (obj instanceof IBooleanDoubleFunction) {
-				// return ((IBooleanDoubleFunction) obj).evaluate(this,
-				// functionNode);
-				// }
-			}
-		}
-		throw new ArithmeticMathException("AbstractASTVisitor#evaluateFunctionLogical(FunctionNode) not possible for: "
-				+ functionNode.toString());
-
-	}
-
 	public boolean evaluateNodeLogical(final ASTNode node) {
 		if (node instanceof FunctionNode) {
 			return evaluateFunctionLogical((FunctionNode) node);
@@ -190,6 +148,43 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 				"AbstractASTVisitor#evaluateNodeLogical(ASTNode) not possible for: " + node.toString());
 	}
 
+	abstract public IBooleanFunction getFunctionBooleanMap(String symbolName);
+
+	abstract public IFieldElementFunction getFunctionMap(String symbolName);
+
+	abstract public Boolean getSymbolBooleanMap(String symbolName);
+
+	abstract public T getSymbolFieldElementMap(String symbolName);
+
+	@Override
+	public void setUp(T data) {
+	}
+
+	@Override
+	public void tearDown() {
+	}
+
+	@Override
+	public T visit(ComplexNode node) {
+		return null;
+	}
+
+	@Override
+	public T visit(DoubleNode node) {
+		return null;
+	}
+
+	@Override
+	public T visit(FloatNode node) {
+		return null;
+	}
+
+	@Override
+	public T visit(FractionNode node) {
+		return null;
+	}
+
+	@Override
 	public T visit(FunctionNode functionNode) {
 		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
 			String symbol = functionNode.getNode(0).toString();
@@ -219,6 +214,11 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 						return ((IFieldElement1Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)));
 					}
 				} else if (functionNode.size() == 3) {
+					ASTNode arg2 = functionNode.getNode(2);
+					if (function instanceof IFieldElementInt2Function && arg2 instanceof IntegerNode) {
+						return ((IFieldElementInt2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
+								((IntegerNode) arg2).getIntValue());
+					}
 					if (function instanceof IFieldElement2Function) {
 						return ((IFieldElement2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
 								evaluateNode(functionNode.getNode(2)));
@@ -228,6 +228,36 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 		}
 		throw new MathException(
 				"AbstractASTVisitor#evaluateFunction(FunctionNode) not possible for: " + functionNode.toString());
+
+	}
+
+	@Override
+	public T visit(IntegerNode node) {
+		return null;
+	}
+
+	@Override
+	public T visit(PatternNode node) {
+		return null;
+	}
+
+	@Override
+	public T visit(StringNode node) {
+		return null;
+	}
+
+	@Override
+	public T visit(SymbolNode node) {
+		FieldElementVariable<T> v = fVariableMap.get(node.toString());
+		if (v != null) {
+			return v.getValue();
+		}
+		// Dfp c = SYMBOL_DFP_MAP.get(node.toString());
+		T c = getSymbolFieldElementMap(node.toString());
+		if (c != null) {
+			return c;
+		}
+		throw new MathException("ComplexEvalVisitor#visit(SymbolNode) not possible for: " + node.toString());
 
 	}
 }

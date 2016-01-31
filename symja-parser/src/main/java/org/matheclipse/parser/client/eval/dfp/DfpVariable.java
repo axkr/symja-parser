@@ -16,8 +16,9 @@
 package org.matheclipse.parser.client.eval.dfp;
 
 import org.apache.commons.math3.dfp.Dfp;
+import org.matheclipse.parser.client.eval.api.FieldElementVariable;
 
-public class DfpVariable implements IDfpValue {
+public class DfpVariable extends FieldElementVariable<Dfp> {
 	Dfp value;
 
 	public DfpVariable(Dfp v) {
@@ -29,6 +30,7 @@ public class DfpVariable implements IDfpValue {
 	 * 
 	 * @see org.matheclipse.parser.eval.IDoubleValue#getValue()
 	 */
+	@Override
 	public Dfp getValue() {
 		return value;
 	}
@@ -38,6 +40,7 @@ public class DfpVariable implements IDfpValue {
 	 * 
 	 * @see org.matheclipse.parser.eval.IDoubleValue#setValue(double)
 	 */
+	@Override
 	public void setValue(Dfp value) {
 		this.value = value;
 	}

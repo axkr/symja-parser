@@ -34,10 +34,12 @@ public class DfpNode extends ASTNode {
 		return value;
 	}
 
+	@Override
 	public String toString() {
 		return value.toString();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -48,6 +50,7 @@ public class DfpNode extends ASTNode {
 		return false;
 	}
 
+	@Override
 	public int hashCode() {
 		return value.hashCode();
 	}

@@ -24,18 +24,6 @@ import org.matheclipse.parser.client.eval.api.FieldElementEvaluator;
  * 
  */
 public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
-	public ComplexEvaluator() {
-		this(new ComplexEvalVisitor(false), false);
-	}
-
-	public ComplexEvaluator(boolean relaxedSyntax) {
-		this(new ComplexEvalVisitor(relaxedSyntax), relaxedSyntax);
-	}
-
-	public ComplexEvaluator(IASTVisitor<Complex> visitor, boolean relaxedSyntax) {
-		super(visitor, relaxedSyntax);
-	}
-
 	/**
 	 * Returns a <code>String</code> representation of the given
 	 * <code>Complex</code> number.
@@ -56,6 +44,18 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 				return Double.valueOf(real).toString() + "+I*(" + Double.valueOf(imag).toString() + ")";
 			}
 		}
+	}
+
+	public ComplexEvaluator() {
+		this(new ComplexEvalVisitor(false), false);
+	}
+
+	public ComplexEvaluator(boolean relaxedSyntax) {
+		this(new ComplexEvalVisitor(relaxedSyntax), relaxedSyntax);
+	}
+
+	public ComplexEvaluator(IASTVisitor<Complex> visitor, boolean relaxedSyntax) {
+		super(visitor, relaxedSyntax);
 	}
 
 }

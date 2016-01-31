@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.complex.ComplexField;
+import org.apache.commons.math3.dfp.Dfp;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;
@@ -40,6 +41,7 @@ import org.matheclipse.parser.client.eval.api.IFieldElement0Function;
 import org.matheclipse.parser.client.eval.api.IFieldElement1Function;
 import org.matheclipse.parser.client.eval.api.IFieldElement2Function;
 import org.matheclipse.parser.client.eval.api.IFieldElementFunction;
+import org.matheclipse.parser.client.eval.api.IFieldElementInt2Function;
 import org.matheclipse.parser.client.eval.api.function.CompoundExpressionFunction;
 import org.matheclipse.parser.client.eval.api.function.PlusFunction;
 import org.matheclipse.parser.client.eval.api.function.SetFunction;
@@ -63,6 +65,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	private static Map<String, IFieldElementFunction> FUNCTION_MAP;
 
 	static class ArcTanFunction implements IFieldElement1Function<Complex> {
+		@Override
 		public Complex evaluate(Complex arg1) {
 			return arg1.atan();// ComplexUtils.atan(arg1);
 		}
@@ -70,10 +73,12 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	}
 
 	static class LogFunction implements IFieldElement1Function<Complex>, IFieldElement2Function<Complex> {
+		@Override
 		public Complex evaluate(Complex arg1) {
 			return arg1.log();// ComplexUtils.log(arg1);
 		}
 
+		@Override
 		public Complex evaluate(Complex base, Complex z) {
 			return z.log().divide(base.log());// ComplexUtils.log(z).divide(ComplexUtils.log(base));
 		}
@@ -83,28 +88,33 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		FUNCTION_BOOLEAN_MAP = new ConcurrentHashMap<String, IBooleanFunction>();
 
 		FUNCTION_BOOLEAN_MAP.put("And", new IBooleanBoolean2Function() {
+			@Override
 			public boolean evaluate(boolean arg1, boolean arg2) {
 				return arg1 && arg2;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Not", new IBooleanBoolean1Function() {
+			@Override
 			public boolean evaluate(boolean arg1) {
 				return !arg1;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Or", new IBooleanBoolean2Function() {
+			@Override
 			public boolean evaluate(boolean arg1, boolean arg2) {
 				return arg1 || arg2;
 			}
 		});
 
 		FUNCTION_BOOLEAN_MAP.put("Equal", new IBooleanFieldElement2Function<Complex>() {
+			@Override
 			public boolean evaluate(Complex arg1, Complex arg2) {
 				return arg1.equals(arg2);
 			}
 		});
 
 		FUNCTION_BOOLEAN_MAP.put("Unequal", new IBooleanFieldElement2Function<Complex>() {
+			@Override
 			public boolean evaluate(Complex arg1, Complex arg2) {
 				return !arg1.equals(arg2);
 			}
@@ -136,6 +146,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		// Functions with 0 argument
 		//
 		FUNCTION_MAP.put("Random", new IFieldElement0Function<Complex>() {
+			@Override
 			public Complex evaluate() {
 				return new Complex(Math.random(), Math.random());
 			}
@@ -144,57 +155,68 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		// Functions with 1 argument
 		//
 		FUNCTION_MAP.put("Abs", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return new Complex(arg1.abs());
 			}
 		});
 		FUNCTION_MAP.put("ArcCos", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.acos();// acos(arg1);
 			}
 		});
 		FUNCTION_MAP.put("ArcSin", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.asin();// asin(arg1);
 			}
 		});
 
 		FUNCTION_MAP.put("Cos", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.cos();// cos(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Cosh", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.cosh();// cosh(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Exp", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.exp();// exp(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Sin", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.sin();// sin(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Sinh", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.sinh();// sinh(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Sqrt", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.sqrt();// sqrt(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Tan", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.tan();// tan(arg1);
 			}
 		});
 		FUNCTION_MAP.put("Tanh", new IFieldElement1Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1) {
 				return arg1.tanh();// tanh(arg1);
 			}
@@ -203,14 +225,24 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		//
 		// Functions with 2 arguments
 		//
-		FUNCTION_MAP.put("Power", new IFieldElement2Function<Complex>() {
+		FUNCTION_MAP.put("Power", new IFieldElementInt2Function<Complex>() {
+			@Override
 			public Complex evaluate(Complex arg1, Complex arg2) {
 				if (arg1.equals(Complex.ZERO) && !arg2.equals(Complex.ZERO)) {
 					return Complex.ZERO;
 				}
 				return arg1.pow(arg2);
 			}
+
+			@Override
+			public Complex evaluate(Complex arg1, int n) {
+				if (n == 0 && arg1.equals(Complex.ZERO)) {
+					return Complex.ZERO;
+				}
+				return arg1.pow(n);
+			}
 		});
+
 	}
 
 	public ComplexEvalVisitor() {
@@ -238,41 +270,51 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		}
 	}
 
+	@Override
 	public void setUp(Complex data) {
 		super.setUp(data);
 	}
 
+	@Override
 	public void tearDown() {
 	}
 
+	@Override
 	public Complex visit(ComplexNode node) {
 		return node.complexValue();
 	}
 
+	@Override
 	public Complex visit(DoubleNode node) {
 		return new Complex(node.doubleValue(), 0.0);
 	}
 
+	@Override
 	public Complex visit(FloatNode node) {
 		return new Complex(node.doubleValue(), 0.0);
 	}
 
+	@Override
 	public Complex visit(FractionNode node) {
 		return new Complex(node.doubleValue(), 0.0);
 	}
 
+	@Override
 	public Complex visit(IntegerNode node) {
 		return new Complex(node.doubleValue(), 0.0);
 	}
 
+	@Override
 	public Complex visit(PatternNode node) {
 		return null;
 	}
 
+	@Override
 	public Complex visit(StringNode node) {
 		return null;
 	}
 
+	@Override
 	public Complex visit(SymbolNode node) {
 		FieldElementVariable<Complex> v = fVariableMap.get(node.toString());
 		if (v != null) {
@@ -296,6 +338,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		fVariableMap.put(variableName, value);
 	}
 
+	@Override
 	public FieldElementVariable<Complex> createVariable(Complex value) {
 		return new ComplexVariable(value);
 	}
@@ -308,18 +351,27 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	 * @param variableName
 	 * @return
 	 */
+	@Override
 	public FieldElementVariable<Complex> getVariable(String variableName) {
 		return fVariableMap.get(variableName);
 	}
 
+	@Override
 	public IFieldElementFunction getFunctionMap(String symbolName) {
 		return FUNCTION_MAP.get(symbolName);
 	}
 
+	@Override
 	public IBooleanFunction getFunctionBooleanMap(String symbolName) {
 		return FUNCTION_BOOLEAN_MAP.get(symbolName);
 	}
 
+	@Override
+	public Complex getSymbolFieldElementMap(String symbolName) {
+		return SYMBOL_MAP.get(symbolName);
+	}
+
+	@Override
 	public Boolean getSymbolBooleanMap(String symbolName) {
 		return SYMBOL_BOOLEAN_MAP.get(symbolName);
 	}
@@ -330,6 +382,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	 * @param variableName
 	 * @param value
 	 */
+	@Override
 	public void defineVariable(String variableName, BooleanVariable value) {
 		fBooleanVariables.put(variableName, value);
 	}
@@ -337,6 +390,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	/**
 	 * Clear all defined variables for this evaluator.
 	 */
+	@Override
 	public void clearVariables() {
 		fVariableMap.clear();
 	}
@@ -349,6 +403,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 	 * @return
 	 * 
 	 */
+	@Override
 	public ASTNode optimizeFunction(final FunctionNode functionNode) {
 		if (functionNode.size() > 0) {
 			boolean complexOnly = true;
@@ -385,6 +440,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		return functionNode;
 	}
 
+	@Override
 	public Field<Complex> getField() {
 		return ComplexField.getInstance();
 	}

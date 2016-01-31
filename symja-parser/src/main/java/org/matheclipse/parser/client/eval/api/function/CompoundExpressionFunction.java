@@ -7,6 +7,7 @@ import org.matheclipse.parser.client.eval.api.IEvaluator;
 import org.matheclipse.parser.client.eval.api.IFieldElementFunctionNode;
 
 public class CompoundExpressionFunction<T extends FieldElement<T>> implements IFieldElementFunctionNode<T> {
+	@Override
 	public T evaluate(IEvaluator<T> engine, FunctionNode function) {
 		T result = null;
 		int end = function.size();

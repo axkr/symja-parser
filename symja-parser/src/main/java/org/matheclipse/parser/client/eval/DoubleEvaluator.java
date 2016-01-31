@@ -71,26 +71,31 @@ public class DoubleEvaluator {
 	}
 
 	static class ArcTanFunction implements IDouble1Function, IDouble2Function {
+		@Override
 		public double evaluate(double arg1) {
 			return Math.atan(arg1);
 		}
 
+		@Override
 		public double evaluate(double arg1, double arg2) {
 			return Math.atan2(arg1, arg2);
 		}
 	}
 
 	static class LogFunction implements IDouble1Function, IDouble2Function {
+		@Override
 		public double evaluate(double arg1) {
 			return Math.log(arg1);
 		}
 
+		@Override
 		public double evaluate(double base, double z) {
 			return Math.log(z) / Math.log(base);
 		}
 	}
 
 	static class CompoundExpressionFunction implements IDoubleFunction {
+		@Override
 		public double evaluate(DoubleEvaluator engine, FunctionNode function) {
 			double result = Double.NaN;
 			int end = function.size();
@@ -105,6 +110,7 @@ public class DoubleEvaluator {
 	}
 
 	static class SetFunction implements IDoubleFunction {
+		@Override
 		public double evaluate(DoubleEvaluator engine, FunctionNode function) {
 			if (function.size() != 3) {
 				throw new ArithmeticMathException(
@@ -129,10 +135,12 @@ public class DoubleEvaluator {
 	}
 
 	static class MaxFunction implements IDoubleFunction, IDouble2Function {
+		@Override
 		public double evaluate(double arg1, double arg2) {
 			return Math.max(arg1, arg2);
 		}
 
+		@Override
 		public double evaluate(DoubleEvaluator engine, FunctionNode function) {
 			double result = Double.NaN;
 			double temp;
@@ -151,10 +159,12 @@ public class DoubleEvaluator {
 	}
 
 	static class MinFunction implements IDoubleFunction, IDouble2Function {
+		@Override
 		public double evaluate(double arg1, double arg2) {
 			return Math.min(arg1, arg2);
 		}
 
+		@Override
 		public double evaluate(DoubleEvaluator engine, FunctionNode function) {
 			double result = Double.NaN;
 			double temp;
@@ -173,10 +183,12 @@ public class DoubleEvaluator {
 	}
 
 	static class PlusFunction implements IDoubleFunction, IDouble2Function {
+		@Override
 		public double evaluate(double arg1, double arg2) {
 			return arg1 + arg2;
 		}
 
+		@Override
 		public double evaluate(DoubleEvaluator engine, FunctionNode function) {
 			double result = 0.0;
 			for (int i = 1; i < function.size(); i++) {
@@ -187,10 +199,12 @@ public class DoubleEvaluator {
 	}
 
 	static class TimesFunction implements IDoubleFunction, IDouble2Function {
+		@Override
 		public double evaluate(double arg1, double arg2) {
 			return arg1 * arg2;
 		}
 
+		@Override
 		public double evaluate(DoubleEvaluator engine, FunctionNode function) {
 			double result = 1.0;
 			for (int i = 1; i < function.size(); i++) {
@@ -218,47 +232,56 @@ public class DoubleEvaluator {
 		FUNCTION_BOOLEAN_MAP = new ConcurrentHashMap<String, Object>();
 
 		FUNCTION_BOOLEAN_MAP.put("And", new IBooleanBoolean2Function() {
+			@Override
 			public boolean evaluate(boolean arg1, boolean arg2) {
 				return arg1 && arg2;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Not", new IBooleanBoolean1Function() {
+			@Override
 			public boolean evaluate(boolean arg1) {
 				return !arg1;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Or", new IBooleanBoolean2Function() {
+			@Override
 			public boolean evaluate(boolean arg1, boolean arg2) {
 				return arg1 || arg2;
 			}
 		});
 
 		FUNCTION_BOOLEAN_MAP.put("Equal", new IBooleanDouble2Function() {
+			@Override
 			public boolean evaluate(double arg1, double arg2) {
 				return Math.abs(arg1 - arg2) < EPSILON;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Greater", new IBooleanDouble2Function() {
+			@Override
 			public boolean evaluate(double arg1, double arg2) {
 				return arg1 > arg2;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("GreaterEqual", new IBooleanDouble2Function() {
+			@Override
 			public boolean evaluate(double arg1, double arg2) {
 				return arg1 >= arg2;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Less", new IBooleanDouble2Function() {
+			@Override
 			public boolean evaluate(double arg1, double arg2) {
 				return arg1 < arg2;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("LessEqual", new IBooleanDouble2Function() {
+			@Override
 			public boolean evaluate(double arg1, double arg2) {
 				return arg1 <= arg2;
 			}
 		});
 		FUNCTION_BOOLEAN_MAP.put("Unequal", new IBooleanDouble2Function() {
+			@Override
 			public boolean evaluate(double arg1, double arg2) {
 				return !(Math.abs(arg1 - arg2) < EPSILON);
 			}
@@ -277,6 +300,7 @@ public class DoubleEvaluator {
 		// Functions with 0 argument
 		//
 		FUNCTION_DOUBLE_MAP.put("Random", new IDouble0Function() {
+			@Override
 			public double evaluate() {
 				return Math.random();
 			}
@@ -285,76 +309,91 @@ public class DoubleEvaluator {
 		// Functions with 1 argument
 		//
 		FUNCTION_DOUBLE_MAP.put("Abs", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.abs(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("ArcCos", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.acos(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("ArcSin", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.asin(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Ceiling", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.ceil(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Cos", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.cos(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Cosh", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.cosh(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Exp", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.exp(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Floor", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.floor(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Round", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.round(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Sign", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.signum(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Sin", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.sin(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Sinh", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.sinh(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Sqrt", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.sqrt(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Tan", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.tan(arg1);
 			}
 		});
 		FUNCTION_DOUBLE_MAP.put("Tanh", new IDouble1Function() {
+			@Override
 			public double evaluate(double arg1) {
 				return Math.tanh(arg1);
 			}
@@ -364,6 +403,7 @@ public class DoubleEvaluator {
 		// Functions with 2 arguments
 		//
 		FUNCTION_DOUBLE_MAP.put("Power", new IDouble2Function() {
+			@Override
 			public double evaluate(double arg1, double arg2) {
 				if (arg1 == 0.0 && arg2 != 0.0) {
 					return arg1;

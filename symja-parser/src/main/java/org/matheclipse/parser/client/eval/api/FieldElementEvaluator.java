@@ -48,6 +48,69 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 	}
 
 	/**
+	 * Clear all defined variables for this evaluator.
+	 */
+	public void clearVariables() {
+		fVisitor.clearVariables();
+	}
+
+	/**
+	 * Define a boolean value for a given variable name.
+	 * 
+	 * @param variableName
+	 * @param value
+	 */
+	public void defineVariable(String variableName, BooleanVariable value) {
+		fVisitor.defineVariable(variableName, value);
+	}
+
+	/**
+	 * Define a value for a given variable name.
+	 * 
+	 * @param variableName
+	 * @param value
+	 */
+	public void defineVariable(String variableName, FieldElementVariable<T> value) {
+		fVisitor.defineVariable(variableName, value);
+	}
+
+	/**
+	 * Reevaluate the <code>expression</code> (possibly after a new Variable
+	 * assignment)
+	 * 
+	 * @return
+	 * @throws SyntaxError
+	 */
+	public T evaluate() {
+		if (fNode == null) {
+			throw new SyntaxError(0, 0, 0, " ", "No parser input defined", 1);
+		}
+		return evaluateNode(fNode);
+	}
+
+	/**
+	 * Parse the given expression <code>String</code> and evaluate it to a
+	 * <code>DATA</code> value.
+	 * 
+	 * @param expression
+	 * @return
+	 * @throws SyntaxError
+	 */
+	public T evaluate(String expression) {
+		Parser p;
+		if (fRelaxedSyntax) {
+			p = new Parser(ASTNodeFactory.RELAXED_STYLE_FACTORY, true);
+		} else {
+			p = new Parser(ASTNodeFactory.MMA_STYLE_FACTORY, false);
+		}
+		fNode = p.parse(expression);
+		if (fNode instanceof FunctionNode) {
+			fNode = fVisitor.optimizeFunction((FunctionNode) fNode);
+		}
+		return evaluateNode(fNode);
+	}
+
+	/**
 	 * Evaluate an already parsed in abstract syntax tree node into a
 	 * <code>T</code> value.
 	 * 
@@ -84,16 +147,6 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 	}
 
 	/**
-	 * Define a value for a given variable name.
-	 * 
-	 * @param variableName
-	 * @param value
-	 */
-	public void defineVariable(String variableName, FieldElementVariable<T> value) {
-		fVisitor.defineVariable(variableName, value);
-	}
-
-	/**
 	 * Returns the data variable value to which the specified variableName is
 	 * mapped, or {@code null} if this map contains no mapping for the
 	 * variableName.
@@ -106,23 +159,6 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 	}
 
 	/**
-	 * Define a boolean value for a given variable name.
-	 * 
-	 * @param variableName
-	 * @param value
-	 */
-	public void defineVariable(String variableName, BooleanVariable value) {
-		fVisitor.defineVariable(variableName, value);
-	}
-
-	/**
-	 * Clear all defined variables for this evaluator.
-	 */
-	public void clearVariables() {
-		fVisitor.clearVariables();
-	}
-
-	/**
 	 * Optimize an already parsed in <code>functionNode</code> into an
 	 * <code>ASTNode</code>.
 	 * 
@@ -132,42 +168,6 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 	 */
 	public ASTNode optimizeFunction(final FunctionNode functionNode) {
 		return fVisitor.optimizeFunction(functionNode);
-	}
-
-	/**
-	 * Parse the given expression <code>String</code> and evaluate it to a
-	 * <code>DATA</code> value.
-	 * 
-	 * @param expression
-	 * @return
-	 * @throws SyntaxError
-	 */
-	public T evaluate(String expression) {
-		Parser p;
-		if (fRelaxedSyntax) {
-			p = new Parser(ASTNodeFactory.RELAXED_STYLE_FACTORY, true);
-		} else {
-			p = new Parser(ASTNodeFactory.MMA_STYLE_FACTORY, false);
-		}
-		fNode = p.parse(expression);
-		if (fNode instanceof FunctionNode) {
-			fNode = fVisitor.optimizeFunction((FunctionNode) fNode);
-		}
-		return evaluateNode(fNode);
-	}
-
-	/**
-	 * Reevaluate the <code>expression</code> (possibly after a new Variable
-	 * assignment)
-	 * 
-	 * @return
-	 * @throws SyntaxError
-	 */
-	public T evaluate() {
-		if (fNode == null) {
-			throw new SyntaxError(0, 0, 0, " ", "No parser input defined", 1);
-		}
-		return evaluateNode(fNode);
 	}
 
 }
