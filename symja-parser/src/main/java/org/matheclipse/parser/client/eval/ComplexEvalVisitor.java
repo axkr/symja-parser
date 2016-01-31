@@ -18,7 +18,9 @@ package org.matheclipse.parser.client.eval;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.math3.Field;
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.complex.ComplexField;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;
@@ -34,14 +36,14 @@ import org.matheclipse.parser.client.eval.api.IBooleanBoolean1Function;
 import org.matheclipse.parser.client.eval.api.IBooleanBoolean2Function;
 import org.matheclipse.parser.client.eval.api.IBooleanFieldElement2Function;
 import org.matheclipse.parser.client.eval.api.IBooleanFunction;
-import org.matheclipse.parser.client.eval.api.IEvaluator;
 import org.matheclipse.parser.client.eval.api.IFieldElement0Function;
 import org.matheclipse.parser.client.eval.api.IFieldElement1Function;
 import org.matheclipse.parser.client.eval.api.IFieldElement2Function;
 import org.matheclipse.parser.client.eval.api.IFieldElementFunction;
-import org.matheclipse.parser.client.eval.api.IFieldElementFunctionNode;
 import org.matheclipse.parser.client.eval.api.function.CompoundExpressionFunction;
+import org.matheclipse.parser.client.eval.api.function.PlusFunction;
 import org.matheclipse.parser.client.eval.api.function.SetFunction;
+import org.matheclipse.parser.client.eval.api.function.TimesFunction;
 import org.matheclipse.parser.client.math.MathException;
 
 /**
@@ -74,34 +76,6 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 
 		public Complex evaluate(Complex base, Complex z) {
 			return z.log().divide(base.log());// ComplexUtils.log(z).divide(ComplexUtils.log(base));
-		}
-	}
-
-	static class PlusFunction implements IFieldElementFunctionNode<Complex>, IFieldElement2Function<Complex> {
-		public Complex evaluate(Complex arg1, Complex arg2) {
-			return arg1.add(arg2);
-		}
-
-		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
-			Complex result = new Complex(0.0, 0.0);
-			for (int i = 1; i < function.size(); i++) {
-				result = result.add(engine.evaluateNode(function.getNode(i)));
-			}
-			return result;
-		}
-	}
-
-	static class TimesFunction implements IFieldElementFunctionNode<Complex>, IFieldElement2Function<Complex> {
-		public Complex evaluate(Complex arg1, Complex arg2) {
-			return arg1.multiply(arg2);
-		}
-
-		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
-			Complex result = new Complex(1.0, 0.0);
-			for (int i = 1; i < function.size(); i++) {
-				result = result.multiply(engine.evaluateNode(function.getNode(i)));
-			}
-			return result;
 		}
 	}
 
@@ -156,8 +130,8 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		FUNCTION_MAP.put("Log", new LogFunction());
 		FUNCTION_MAP.put("CompoundExpression", new CompoundExpressionFunction<Complex>());
 		FUNCTION_MAP.put("Set", new SetFunction<Complex>());
-		FUNCTION_MAP.put("Plus", new PlusFunction());
-		FUNCTION_MAP.put("Times", new TimesFunction());
+		FUNCTION_MAP.put("Plus", new PlusFunction<Complex>());
+		FUNCTION_MAP.put("Times", new TimesFunction<Complex>());
 		//
 		// Functions with 0 argument
 		//
@@ -409,5 +383,9 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 			}
 		}
 		return functionNode;
+	}
+
+	public Field<Complex> getField() {
+		return ComplexField.getInstance();
 	}
 }

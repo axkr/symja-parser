@@ -15,6 +15,7 @@
  */
 package org.matheclipse.parser.client.eval.api;
 
+import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FunctionNode;
@@ -93,4 +94,6 @@ public interface IEvaluator<T extends FieldElement<T>> {
 	 * 
 	 */
 	public ASTNode optimizeFunction(final FunctionNode functionNode);
+	
+	public Field<T> getField();
 }
