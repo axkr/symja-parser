@@ -17,13 +17,13 @@ package org.matheclipse.parser.client.eval;
 
 import org.apache.commons.math3.complex.Complex;
 import org.matheclipse.parser.client.eval.api.IASTVisitor;
-import org.matheclipse.parser.client.eval.api.ObjectEvaluator;
+import org.matheclipse.parser.client.eval.api.FieldElementEvaluator;
 
 /**
  * Evaluate math expressions to {@code Complex} numbers.
  * 
  */
-public class ComplexEvaluator extends ObjectEvaluator<Complex, ComplexVariable, Complex> {
+public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	public ComplexEvaluator() {
 		this(new ComplexEvalVisitor(false), false);
 	}
@@ -31,8 +31,8 @@ public class ComplexEvaluator extends ObjectEvaluator<Complex, ComplexVariable, 
 	public ComplexEvaluator(boolean relaxedSyntax) {
 		this(new ComplexEvalVisitor(relaxedSyntax), relaxedSyntax);
 	}
-	
-	public ComplexEvaluator(IASTVisitor<Complex, ComplexVariable, Complex> visitor, boolean relaxedSyntax) {
+
+	public ComplexEvaluator(IASTVisitor<Complex> visitor, boolean relaxedSyntax) {
 		super(visitor, relaxedSyntax);
 	}
 

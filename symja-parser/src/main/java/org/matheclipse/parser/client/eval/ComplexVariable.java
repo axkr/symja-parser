@@ -16,10 +16,9 @@
 package org.matheclipse.parser.client.eval;
 
 import org.apache.commons.math3.complex.Complex;
+import org.matheclipse.parser.client.eval.api.FieldElementVariable;
 
-public class ComplexVariable {
-	Complex value;
-
+public class ComplexVariable extends FieldElementVariable<Complex> {
 	public ComplexVariable(double v) {
 		value = new Complex(v, 0.0);
 	}
@@ -28,14 +27,12 @@ public class ComplexVariable {
 		value = v;
 	}
 
-	public Complex getValue() {
-		return value;
+	public void setValue(double real) {
+		this.value = new Complex(real, 0.0);
 	}
-	public void setValue(double v) {
-		this.value = new Complex(v, 0.0);
-	}
-	public void setValue(Complex value) {
-		this.value = value;
+	
+	public void setValue(double real, double imaginary) {
+		this.value = new Complex(real, imaginary);
 	}
 
 }

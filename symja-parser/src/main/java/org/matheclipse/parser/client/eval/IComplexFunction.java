@@ -20,5 +20,5 @@ import org.matheclipse.parser.client.ast.FunctionNode;
 import org.matheclipse.parser.client.eval.api.IEvaluator;
 
 public interface IComplexFunction {
-  public Complex evaluate(IEvaluator<Complex, ComplexVariable> engine, FunctionNode function);
+  public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function);
 }

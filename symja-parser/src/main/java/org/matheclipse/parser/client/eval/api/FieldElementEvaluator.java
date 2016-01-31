@@ -15,6 +15,7 @@
  */
 package org.matheclipse.parser.client.eval.api;
 
+import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.Parser;
 import org.matheclipse.parser.client.SyntaxError;
 import org.matheclipse.parser.client.ast.ASTNode;
@@ -23,26 +24,25 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.operator.ASTNodeFactory;
 
 /**
- * Evaluates a given expression (as <code>String</code> or
- * <code>ASTNode</code>) into a <code>DATA</code> object type. For example
- * the <code>ComplexEvaluator</code> class uses the <code>Complex</code>
- * class data type.
+ * Evaluates a given expression (as <code>String</code> or <code>ASTNode</code>)
+ * into a <code>T</code> object type. For example the
+ * <code>ComplexEvaluator</code> class uses the <code>Complex</code> class data
+ * type.
  * 
- * @param <DATA>
- * @param <DATA_VARIABLE>
- * @param <USER_DATA_TYPE>
+ * @param <T>
+ *            the FieldElement value which should be evaluated
  * 
  * @see org.matheclipse.parser.client.eval.ComplexEvaluator
  * @see org.matheclipse.parser.client.math.Complex
  */
-public class ObjectEvaluator<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
+public class FieldElementEvaluator<T extends FieldElement<T>> {
 	protected ASTNode fNode;
 
-	protected IASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> fVisitor;
+	protected IASTVisitor<T> fVisitor;
 
 	protected final boolean fRelaxedSyntax;
-	
-	public ObjectEvaluator(IASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> visitor, boolean relaxedSyntax) {
+
+	public FieldElementEvaluator(IASTVisitor<T> visitor, boolean relaxedSyntax) {
 		fVisitor = visitor;
 		fRelaxedSyntax = relaxedSyntax;
 	}
@@ -52,16 +52,16 @@ public class ObjectEvaluator<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
 	 * <code>DATA</code> value.
 	 * 
 	 * @param node
-	 *          abstract syntax tree node
+	 *            abstract syntax tree node
 	 * 
 	 * @return the evaluated Complex number
 	 * 
 	 */
-	public DATA evaluateNode(final ASTNode node) {
+	public T evaluateNode(final ASTNode node) {
 		return evaluateNode(node, null);
 	}
 
-	public DATA evaluateNode(ASTNode node, USER_DATA_TYPE data) {
+	public T evaluateNode(ASTNode node, T data) {
 		try {
 			fVisitor.setUp(data);
 			return fVisitor.evaluateNode(node);
@@ -76,7 +76,7 @@ public class ObjectEvaluator<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
 	 * @param variableName
 	 * @param value
 	 */
-	public void defineVariable(String variableName, DATA_VARIABLE value) {
+	public void defineVariable(String variableName, FieldElementVariable<T> value) {
 		fVisitor.defineVariable(variableName, value);
 	}
 
@@ -88,7 +88,7 @@ public class ObjectEvaluator<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
 	 * @param variableName
 	 * @return
 	 */
-	public DATA_VARIABLE getVariable(String variableName) {
+	public FieldElementVariable<T> getVariable(String variableName) {
 		return fVisitor.getVariable(variableName);
 	}
 
@@ -129,7 +129,7 @@ public class ObjectEvaluator<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
 	 * @return
 	 * @throws SyntaxError
 	 */
-	public DATA evaluate(String expression) { 
+	public T evaluate(String expression) {
 		Parser p;
 		if (fRelaxedSyntax) {
 			p = new Parser(ASTNodeFactory.RELAXED_STYLE_FACTORY, true);
@@ -150,7 +150,7 @@ public class ObjectEvaluator<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
 	 * @return
 	 * @throws SyntaxError
 	 */
-	public DATA evaluate() {
+	public T evaluate() {
 		if (fNode == null) {
 			throw new SyntaxError(0, 0, 0, " ", "No parser input defined", 1);
 		}

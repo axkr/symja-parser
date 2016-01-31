@@ -15,6 +15,7 @@
  */
 package org.matheclipse.parser.client.eval.api;
 
+import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;
 import org.matheclipse.parser.client.ast.FunctionNode;
@@ -32,11 +33,11 @@ import org.matheclipse.parser.client.eval.DoubleNode;
  * @param <USER_DATA_TYPE>
  *          a user-defined data type
  */
-public interface IASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> extends IEvaluator<DATA, DATA_VARIABLE> {
+public interface IASTVisitor<T extends FieldElement<T>> extends IEvaluator<T> {
 	/**
 	 * Before a visitor run starts this method will be called.
 	 */
-	public void setUp(USER_DATA_TYPE data);
+	public void setUp(T data);
 
 	/**
 	 * After a visitor run has finished this method will be called. Typically this
@@ -44,21 +45,21 @@ public interface IASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> extends IEvalu
 	 */
 	public void tearDown();
 
-	public DATA visit(ComplexNode node);
+	public T visit(ComplexNode node);
 
-	public DATA visit(DoubleNode node);
+	public T visit(DoubleNode node);
 
-	public DATA visit(FunctionNode node);
+	public T visit(FunctionNode node);
 
-	public DATA visit(FloatNode node);
+	public T visit(FloatNode node);
 
-	public DATA visit(FractionNode node);
+	public T visit(FractionNode node);
 
-	public DATA visit(IntegerNode node);
+	public T visit(IntegerNode node);
 
-	public DATA visit(PatternNode node);
+	public T visit(PatternNode node);
 
-	public DATA visit(StringNode node);
+	public T visit(StringNode node);
 
-	public DATA visit(SymbolNode node);
+	public T visit(SymbolNode node);
 }

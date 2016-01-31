@@ -15,6 +15,7 @@
  */
 package org.matheclipse.parser.client.eval.api;
 
+import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;
@@ -30,11 +31,12 @@ import org.matheclipse.parser.client.eval.DoubleNode;
 /**
  * Abstract AST visitor with empty default method implementations.
  * 
- * @param <USER_DATA_TYPE> 
+ * @param <USER_DATA_TYPE>
  */
-public abstract class AbstractASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> implements IASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> {
+public abstract class AbstractASTVisitor<DATA extends FieldElement<DATA>>
+		implements IASTVisitor<DATA> {
 
-	public void setUp(USER_DATA_TYPE data) {
+	public void setUp(DATA data) {
 	}
 
 	public void tearDown() {
@@ -77,7 +79,7 @@ public abstract class AbstractASTVisitor<DATA, DATA_VARIABLE, USER_DATA_TYPE> im
 	 * <code>DATA</code> value.
 	 * 
 	 * @param node
-	 *          abstract syntax tree node
+	 *            abstract syntax tree node
 	 * 
 	 * @return the evaluated value
 	 * 

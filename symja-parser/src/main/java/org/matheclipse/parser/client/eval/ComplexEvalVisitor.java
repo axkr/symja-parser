@@ -30,6 +30,7 @@ import org.matheclipse.parser.client.ast.PatternNode;
 import org.matheclipse.parser.client.ast.StringNode;
 import org.matheclipse.parser.client.ast.SymbolNode;
 import org.matheclipse.parser.client.eval.api.AbstractASTVisitor;
+import org.matheclipse.parser.client.eval.api.FieldElementVariable;
 import org.matheclipse.parser.client.eval.api.IEvaluator;
 import org.matheclipse.parser.client.math.ArithmeticMathException;
 import org.matheclipse.parser.client.math.MathException;
@@ -39,7 +40,7 @@ import org.matheclipse.parser.client.math.MathException;
  * 
  * @param <T>
  */
-public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVariable, Complex> {
+public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 
 	public final static boolean DEBUG = false;
 
@@ -71,7 +72,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 	}
 
 	static class CompoundExpressionFunction implements IComplexFunction {
-		public Complex evaluate(IEvaluator<Complex, ComplexVariable> engine, FunctionNode function) {
+		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
 			Complex result = null;
 			int end = function.size();
 			for (int i = 1; i < end; i++) {
@@ -85,7 +86,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 	}
 
 	static class SetFunction implements IComplexFunction {
-		public Complex evaluate(IEvaluator<Complex, ComplexVariable> engine, FunctionNode function) {
+		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
 			if (function.size() != 3) {
 				throw new ArithmeticMathException(
 						"SetFunction#evaluate(DoubleEvaluator,FunctionNode) needs 2 arguments: " + function.toString());
@@ -97,7 +98,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 			}
 			String variableName = ((SymbolNode) function.getNode(1)).getString();
 			Complex result = engine.evaluateNode(function.getNode(2));
-			ComplexVariable dv = engine.getVariable(variableName);
+			FieldElementVariable<Complex> dv = engine.getVariable(variableName);
 			if (dv == null) {
 				dv = new ComplexVariable(result);
 			} else {
@@ -113,7 +114,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 			return arg1.add(arg2);
 		}
 
-		public Complex evaluate(IEvaluator<Complex, ComplexVariable> engine, FunctionNode function) {
+		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
 			Complex result = new Complex(0.0, 0.0);
 			for (int i = 1; i < function.size(); i++) {
 				result = result.add(engine.evaluateNode(function.getNode(i)));
@@ -127,7 +128,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 			return arg1.multiply(arg2);
 		}
 
-		public Complex evaluate(IEvaluator<Complex, ComplexVariable> engine, FunctionNode function) {
+		public Complex evaluate(IEvaluator<Complex> engine, FunctionNode function) {
 			Complex result = new Complex(1.0, 0.0);
 			for (int i = 1; i < function.size(); i++) {
 				result = result.multiply(engine.evaluateNode(function.getNode(i)));
@@ -270,14 +271,14 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 		});
 	}
 
-	private Map<String, ComplexVariable> fVariableMap;
+	private Map<String, FieldElementVariable<Complex> > fVariableMap;
 
 	private Map<String, BooleanVariable> fBooleanVariables;
 
 	private final boolean fRelaxedSyntax;
 
 	public ComplexEvalVisitor(boolean relaxedSyntax) {
-		fVariableMap = new HashMap<String, ComplexVariable>();
+		fVariableMap = new HashMap<String, FieldElementVariable<Complex>>();
 		fBooleanVariables = new HashMap<String, BooleanVariable>();
 		fRelaxedSyntax = relaxedSyntax;
 		if (fRelaxedSyntax) {
@@ -379,7 +380,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 	}
 
 	public Complex visit(SymbolNode node) {
-		ComplexVariable v = fVariableMap.get(node.toString());
+		FieldElementVariable<Complex> v = fVariableMap.get(node.toString());
 		if (v != null) {
 			return v.getValue();
 		}
@@ -469,7 +470,8 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 	 * @param variableName
 	 * @param value
 	 */
-	public void defineVariable(String variableName, ComplexVariable value) {
+	@Override
+	public void defineVariable(String variableName, FieldElementVariable<Complex> value) {
 		fVariableMap.put(variableName, value);
 	}
 
@@ -481,7 +483,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex, ComplexVaria
 	 * @param variableName
 	 * @return
 	 */
-	public ComplexVariable getVariable(String variableName) {
+	public FieldElementVariable<Complex> getVariable(String variableName) {
 		return fVariableMap.get(variableName);
 	}
 

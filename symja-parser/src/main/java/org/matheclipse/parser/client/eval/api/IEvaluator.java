@@ -15,6 +15,7 @@
  */
 package org.matheclipse.parser.client.eval.api;
 
+import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FunctionNode;
 import org.matheclipse.parser.client.eval.BooleanVariable;
@@ -25,13 +26,13 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
  * <code>ComplexEvalVisitor</code> class uses the <code>Complex</code> class
  * data type.
  * 
- * @param <DATA>
+ * @param <T>
  * @param <DATA_VARIABLE>
  * 
  * @see org.matheclipse.parser.client.eval.api.IASTVisitor
  * @see org.matheclipse.parser.client.eval.ComplexEvalVisitor
  */
-public interface IEvaluator<DATA, DATA_VARIABLE> {
+public interface IEvaluator<T extends FieldElement<T>> {
 	/**
 	 * Clear all defined variables for this evaluator.
 	 */
@@ -51,19 +52,19 @@ public interface IEvaluator<DATA, DATA_VARIABLE> {
 	 * @param variableName
 	 * @param value
 	 */
-	public void defineVariable(String variableName, DATA_VARIABLE value);
+	public void defineVariable(String variableName, FieldElementVariable<T> value);
 
 	/**
 	 * Evaluate an already parsed in abstract syntax tree node into a
 	 * <code>DATA</code> value.
 	 * 
 	 * @param node
-	 *          abstract syntax tree node
+	 *            abstract syntax tree node
 	 * 
 	 * @return the evaluated DATA
 	 * 
 	 */
-	public DATA evaluateNode(ASTNode node);
+	public T evaluateNode(ASTNode node);
 
 	/**
 	 * Returns the data variable value to which the specified variableName is
@@ -73,7 +74,7 @@ public interface IEvaluator<DATA, DATA_VARIABLE> {
 	 * @param variableName
 	 * @return
 	 */
-	public DATA_VARIABLE getVariable(String variableName);
+	public FieldElementVariable<T>  getVariable(String variableName);
 
 	/**
 	 * Optimize an already parsed in <code>functionNode</code> into an
