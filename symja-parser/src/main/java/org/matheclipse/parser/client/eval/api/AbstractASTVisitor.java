@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.dfp.Dfp;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FloatNode;
 import org.matheclipse.parser.client.ast.FractionNode;
