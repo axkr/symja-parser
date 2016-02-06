@@ -9,7 +9,6 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.eval.DoubleEvaluator;
 import org.matheclipse.parser.client.eval.api.FieldElementVariable;
 import org.matheclipse.parser.client.eval.dfp.DfpEvalVisitor;
-import org.matheclipse.parser.client.math.ArithmeticMathException;
 
 import junit.framework.TestCase;
 
@@ -27,7 +26,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
 			Dfp d = engine.evaluate(in);
 			assertEquals(d.toString(), compareWith);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -81,7 +80,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
 			Dfp d = engine.evaluate("sin(pi/2*cOs(pi))");
 			assertEquals(d.toString(), "-1.");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -96,7 +95,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			engine.setValue(vd, 4);
 			d = engine.evaluate();
 			assertEquals(d.toString(), "19.");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -111,7 +110,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			engine.setValue(vd, 4);
 			d = engine.evaluate();
 			assertEquals(d.toString(), "255.");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -130,7 +129,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			vb.setValue(false);
 			d = engine.evaluate();
 			Assert.assertEquals(d.getReal(), 0d, DoubleEvaluator.EPSILON);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -148,7 +147,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			engine.setValue(vd2, 4.0);
 			d = engine.evaluate();
 			Assert.assertEquals(d.getReal(), 1d, DoubleEvaluator.EPSILON);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -166,7 +165,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 				list.add(string);
 			}
 			Assert.assertEquals(list.toString(), "[a, b, $c]");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -183,7 +182,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			vb.setValue(false);
 			d = engine.evaluate();
 			Assert.assertEquals(d.getReal(), 0d, DoubleEvaluator.EPSILON);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -194,7 +193,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
 			Dfp d = engine.evaluate("aTest(1.0)");
 			assertEquals(d.toString(), "");
-		} catch (ArithmeticMathException e) {
+		} catch (RuntimeException e) {
 			assertEquals("DfpEvaluator#evaluateFunction(FunctionNode) not possible for: atest(1.)", e.getMessage());
 		}
 	}

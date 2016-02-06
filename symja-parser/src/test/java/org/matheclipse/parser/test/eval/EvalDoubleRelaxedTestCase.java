@@ -8,7 +8,6 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.eval.DoubleEvaluator;
 import org.matheclipse.parser.client.eval.DoubleVariable;
 import org.matheclipse.parser.client.eval.IDoubleValue;
-import org.matheclipse.parser.client.math.ArithmeticMathException;
 
 import junit.framework.TestCase;
 
@@ -26,7 +25,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			DoubleEvaluator engine = new DoubleEvaluator(true);
 			double d = engine.evaluate(in);
 			assertEquals(Double.valueOf(d).toString(), compareWith);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -80,7 +79,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			DoubleEvaluator engine = new DoubleEvaluator(true);
 			double d = engine.evaluate("sin(pi/2*cOs(pi))");
 			assertEquals(Double.toString(d), "-1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -96,7 +95,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			vd.setValue(4);
 			d = engine.evaluate();
 			assertEquals(Double.valueOf(d).toString(), "19.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -112,7 +111,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			vd.setValue(4);
 			d = engine.evaluate();
 			assertEquals(Double.valueOf(d).toString(), "255.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -131,7 +130,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			vb.setValue(false);
 			d = engine.evaluate();
 			Assert.assertEquals(d, 0d, DoubleEvaluator.EPSILON);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -151,7 +150,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			vd2.setValue(4.0);
 			d = engine.evaluate();
 			Assert.assertEquals(d, 1d, DoubleEvaluator.EPSILON);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -169,7 +168,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 				list.add(string);
 			}
 			Assert.assertEquals(list.toString(), "[a, b, $c]");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -186,7 +185,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			vb.setValue(false);
 			d = engine.evaluate();
 			Assert.assertEquals(d, 0d, DoubleEvaluator.EPSILON);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -197,7 +196,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			DoubleEvaluator engine = new DoubleEvaluator(true);
 			double d = engine.evaluate("aTest(1.0)");
 			assertEquals(Double.toString(d), "");
-		} catch (ArithmeticMathException e) {
+		} catch (RuntimeException e) {
 			assertEquals("EvalDouble#evaluateFunction(FunctionNode) not possible for: atest(1.0)", e.getMessage());
 		}
 	}
@@ -208,7 +207,7 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			engine.defineVariable("x", -1);
 			Double d = engine.evaluate("abs(x)");
 			assertEquals(Double.toString(d), "1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}

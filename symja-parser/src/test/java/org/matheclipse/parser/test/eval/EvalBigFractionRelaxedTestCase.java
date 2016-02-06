@@ -26,7 +26,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 			BigFraction bf = engine.evaluate(in);
 			String result = BigFractionEvaluator.toString(bf);
 			assertEquals(result, compareWith);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -65,7 +65,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 			bf = engine.evaluate();
 			result = BigFractionEvaluator.toString(bf);
 			assertEquals(result, "208");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -83,7 +83,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 			vb.setValue(false);
 			bf = engine.evaluate();
 			Assert.assertEquals(BigFractionEvaluator.toString(bf), "0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -104,7 +104,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 			vc2.setValue(-3);
 			bf = engine.evaluate();
 			Assert.assertEquals(BigFractionEvaluator.toString(bf), "1");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}

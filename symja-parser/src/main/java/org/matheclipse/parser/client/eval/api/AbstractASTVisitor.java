@@ -32,7 +32,6 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.eval.ComplexNode;
 import org.matheclipse.parser.client.eval.DoubleNode;
 import org.matheclipse.parser.client.math.ArithmeticMathException;
-import org.matheclipse.parser.client.math.MathException;
 
 /**
  * Abstract AST visitor with empty default method implementations.
@@ -225,7 +224,7 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 				}
 			}
 		}
-		throw new MathException(
+		throw new ArithmeticMathException(
 				"AbstractASTVisitor#evaluateFunction(FunctionNode) not possible for: " + functionNode.toString());
 
 	}
@@ -256,7 +255,7 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 		if (c != null) {
 			return c;
 		}
-		throw new MathException("ComplexEvalVisitor#visit(SymbolNode) not possible for: " + node.toString());
+		throw new ArithmeticMathException("ComplexEvalVisitor#visit(SymbolNode) not possible for: " + node.toString());
 
 	}
 }

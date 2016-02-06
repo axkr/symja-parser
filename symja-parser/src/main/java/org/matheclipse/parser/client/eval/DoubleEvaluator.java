@@ -867,7 +867,7 @@ public class DoubleEvaluator {
 			if (doubleOnly) {
 				try {
 					return new DoubleNode(evaluateFunction(functionNode));
-				} catch (Exception e) {
+				} catch (RuntimeException e) {
 
 				}
 			}

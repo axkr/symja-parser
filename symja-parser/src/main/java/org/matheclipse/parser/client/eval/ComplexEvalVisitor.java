@@ -45,7 +45,7 @@ import org.matheclipse.parser.client.eval.api.function.CompoundExpressionFunctio
 import org.matheclipse.parser.client.eval.api.function.PlusFunction;
 import org.matheclipse.parser.client.eval.api.function.SetFunction;
 import org.matheclipse.parser.client.eval.api.function.TimesFunction;
-import org.matheclipse.parser.client.math.MathException;
+import org.matheclipse.parser.client.math.ArithmeticMathException;
 
 /**
  * Abstract AST visitor with empty default method implementation.
@@ -323,7 +323,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 		if (c != null) {
 			return c;
 		}
-		throw new MathException("ComplexEvalVisitor#visit(SymbolNode) not possible for: " + node.toString());
+		throw new ArithmeticMathException("ComplexEvalVisitor#visit(SymbolNode) not possible for: " + node.toString());
 	}
 
 	/**
@@ -431,7 +431,7 @@ public class ComplexEvalVisitor extends AbstractASTVisitor<Complex> {
 			if (complexOnly) {
 				try {
 					return new ComplexNode(visit(functionNode));
-				} catch (Exception e) {
+				} catch (RuntimeException e) {
 
 				}
 			}

@@ -56,7 +56,6 @@ import org.matheclipse.parser.client.eval.api.function.PlusFunction;
 import org.matheclipse.parser.client.eval.api.function.SetFunction;
 import org.matheclipse.parser.client.eval.api.function.TimesFunction;
 import org.matheclipse.parser.client.math.ArithmeticMathException;
-import org.matheclipse.parser.client.math.MathException;
 import org.matheclipse.parser.client.operator.ASTNodeFactory;
 
 /**
@@ -1001,7 +1000,7 @@ public class DfpEvalVisitor extends AbstractASTVisitor<Dfp> {
 			if (dfpOnly) {
 				try {
 					return new DfpNode(evaluateFunction(functionNode));
-				} catch (Exception e) {
+				} catch (RuntimeException e) {
 
 				}
 			}
@@ -1089,17 +1088,4 @@ public class DfpEvalVisitor extends AbstractASTVisitor<Dfp> {
 		return null;
 	}
 
-	// @Override
-	// public Dfp visit(SymbolNode node) {
-	// FieldElementVariable<Dfp> v = fVariableMap.get(node.toString());
-	// if (v != null) {
-	// return v.getValue();
-	// }
-	// Dfp c = SYMBOL_DFP_MAP.get(node.toString());
-	// if (c != null) {
-	// return c;
-	// }
-	// throw new MathException("ComplexEvalVisitor#visit(SymbolNode) not
-	// possible for: " + node.toString());
-	// }
 }

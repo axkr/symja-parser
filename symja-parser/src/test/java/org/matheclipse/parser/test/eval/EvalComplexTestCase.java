@@ -33,7 +33,7 @@ public class EvalComplexTestCase extends TestCase {
 			Complex c = engine.evaluateNode(obj);
 			String result = ComplexEvaluator.toString(c);
 			assertEquals(result, compareWith);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -85,7 +85,7 @@ public class EvalComplexTestCase extends TestCase {
 			ComplexEvaluator engine = new ComplexEvaluator();
 			Complex c = engine.evaluate("Sin[Pi/2*Cos[Pi]]");
 			assertEquals(ComplexEvaluator.toString(c), "-1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -105,7 +105,7 @@ public class EvalComplexTestCase extends TestCase {
 			c = engine.evaluateNode(obj);
 			result = ComplexEvaluator.toString(c);
 			assertEquals(result, "15.999999999999998+I*12.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -123,7 +123,7 @@ public class EvalComplexTestCase extends TestCase {
 			vb.setValue(false);
 			cmp = engine.evaluate();
 			Assert.assertEquals(ComplexEvaluator.toString(cmp), "0.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -142,7 +142,7 @@ public class EvalComplexTestCase extends TestCase {
 			vc2.setValue(-3.0);
 			cmp = engine.evaluate();
 			Assert.assertEquals(ComplexEvaluator.toString(cmp), "1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -154,7 +154,7 @@ public class EvalComplexTestCase extends TestCase {
 			engine.defineVariable("x", new ComplexVariable(Complex.I)); 
 			Complex c = engine.evaluate("Abs[x]");
 			assertEquals(ComplexEvaluator.toString(c), "1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}

@@ -25,7 +25,7 @@ public class EvalComplexRelaxedTestCase extends TestCase {
 			Complex c = engine.evaluate(in);
 			String result = ComplexEvaluator.toString(c);
 			assertEquals(result, compareWith);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -77,7 +77,7 @@ public class EvalComplexRelaxedTestCase extends TestCase {
 			ComplexEvaluator engine = new ComplexEvaluator(true);
 			Complex c = engine.evaluate("Sin(pi/2*Cos(PI))");
 			assertEquals(ComplexEvaluator.toString(c), "-1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -95,7 +95,7 @@ public class EvalComplexRelaxedTestCase extends TestCase {
 			c = engine.evaluate();
 			result = ComplexEvaluator.toString(c);
 			assertEquals(result, "15.999999999999998+I*12.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}
@@ -113,7 +113,7 @@ public class EvalComplexRelaxedTestCase extends TestCase {
 			vb.setValue(false);
 			cmp = engine.evaluate();
 			Assert.assertEquals(ComplexEvaluator.toString(cmp), "0.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
@@ -132,19 +132,19 @@ public class EvalComplexRelaxedTestCase extends TestCase {
 			vc2.setValue(-3.0);
 			cmp = engine.evaluate();
 			Assert.assertEquals(ComplexEvaluator.toString(cmp), "1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
 	}
-	
+
 	public void testEval010() {
 		try {
 			ComplexEvaluator engine = new ComplexEvaluator(true);
-			engine.defineVariable("x", new ComplexVariable(Complex.I)); 
+			engine.defineVariable("x", new ComplexVariable(Complex.I));
 			Complex c = engine.evaluate("abs(x)");
 			assertEquals(ComplexEvaluator.toString(c), "1.0");
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 			assertEquals("", e.getMessage());
 		}

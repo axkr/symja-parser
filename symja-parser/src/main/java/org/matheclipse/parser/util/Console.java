@@ -190,7 +190,7 @@ public class Console {
 		} catch (MathRuntimeException e) {
 			System.err.println();
 			System.err.println(e.getMessage());
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return "";

@@ -922,7 +922,7 @@ public class BigFractionEvalVisitor extends AbstractASTVisitor<BigFraction> {
 		// if (dfpOnly) {
 		// try {
 		// return new BigFractionNode(evaluateFunction(functionNode));
-		// } catch (Exception e) {
+		// } catch (RuntimeException e) {
 		//
 		// }
 		// }
