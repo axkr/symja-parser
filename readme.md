@@ -1,6 +1,7 @@
 # Apache commons-math parser
 
-Implementation of math expressions parsers for Java double values or [Apache Commons Math](http://commons.apache.org/proper/commons-math/) Complex or Dfp numbers.
+Implementation of math expressions parsers for Java double values or [Apache Commons Math](http://commons.apache.org/proper/commons-math/) Complex,
+Dfp or BigFraction numbers.
 
 ## Evaluate a math expresson string
 
