@@ -5,6 +5,6 @@ package org.matheclipse.parser.client.eval.api;
  * <code>FieldElement<T></code> value.
  *
  */
-public interface IFieldElementFunction {
+public interface IFieldElementFunction<T> {
 
 }

@@ -52,11 +52,11 @@ public interface IASTVisitor<T extends FieldElement<T>> extends IEvaluator<T> {
 
 	public T visit(DoubleNode node);
 
-	public T visit(FunctionNode node);
-
 	public T visit(FloatNode node);
 
 	public T visit(FractionNode node);
+
+	public T visit(FunctionNode node);
 
 	public T visit(IntegerNode node);
 

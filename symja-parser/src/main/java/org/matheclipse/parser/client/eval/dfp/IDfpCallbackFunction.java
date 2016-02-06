@@ -24,5 +24,5 @@ import org.matheclipse.parser.client.ast.FunctionNode;
  * 
  */
 public interface IDfpCallbackFunction {
-	public Dfp evaluate(DfpEvalVisitor engine, FunctionNode function, Dfp[] args);
+	public Dfp evaluate(DfpEvaluator engine, FunctionNode function, Dfp[] args);
 }

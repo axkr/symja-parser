@@ -18,6 +18,6 @@ package org.matheclipse.parser.client.eval.api;
 import org.apache.commons.math3.FieldElement;
 import org.matheclipse.parser.client.ast.FunctionNode;
 
-public interface IFieldElementFunctionNode<T extends FieldElement<T>> extends IFieldElementFunction {
+public interface IFieldElementFunctionNode<T extends FieldElement<T>> extends IFieldElementFunction<T> {
 	public T evaluate(IEvaluator<T> engine, FunctionNode function);
 }

@@ -3,7 +3,6 @@ package org.matheclipse.parser.test.eval;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.junit.Assert;
 import org.matheclipse.parser.client.eval.BooleanVariable;
-import org.matheclipse.parser.client.eval.bigfraction.BigFractionEvalVisitor;
 import org.matheclipse.parser.client.eval.bigfraction.BigFractionEvaluator;
 import org.matheclipse.parser.client.eval.bigfraction.BigFractionVariable;
 
@@ -22,7 +21,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 
 	public void check(String in, String compareWith) {
 		try {
-			BigFractionEvalVisitor engine = new BigFractionEvalVisitor(true);
+			BigFractionEvaluator engine = new BigFractionEvaluator(true);
 			BigFraction bf = engine.evaluate(in);
 			String result = BigFractionEvaluator.toString(bf);
 			assertEquals(result, compareWith);
@@ -55,7 +54,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 	public void testEval003() {
 		try {
 			BigFractionVariable vc = new BigFractionVariable(new BigFraction(3));
-			BigFractionEvalVisitor engine = new BigFractionEvalVisitor(true);
+			BigFractionEvaluator engine = new BigFractionEvaluator(true);
 			engine.defineVariable("x", vc);
 			BigFraction bf = engine.evaluate("x^2+3*x^3");
 			String result = BigFractionEvaluator.toString(bf);
@@ -73,7 +72,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 
 	public void testEval006() {
 		try {
-			BigFractionEvalVisitor engine = new BigFractionEvalVisitor(true);
+			BigFractionEvaluator engine = new BigFractionEvaluator(true);
 			BooleanVariable vb = new BooleanVariable(true);
 			engine.defineVariable("$1", vb);
 			BooleanVariable vb2 = new BooleanVariable(true);
@@ -92,7 +91,7 @@ public class EvalBigFractionRelaxedTestCase extends TestCase {
 	public void testEval007() {
 		try {
 			
-			BigFractionEvalVisitor engine = new BigFractionEvalVisitor(true);
+			BigFractionEvaluator engine = new BigFractionEvaluator(true);
 			
 			BigFractionVariable vc = new BigFractionVariable(new BigFraction(3));
 			engine.defineVariable("$1", vc); 

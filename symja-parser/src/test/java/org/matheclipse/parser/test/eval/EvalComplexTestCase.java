@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 /**
  * Tests evaluation in <code>Complex</code> expression mode
- *  
+ * 
  * @see org.matheclipse.parser.client.math.Complex
  */
 public class EvalComplexTestCase extends TestCase {
@@ -57,7 +57,7 @@ public class EvalComplexTestCase extends TestCase {
 		check("0^2", "0.0");
 		check("0^0", "NaN+I*(NaN)");
 		check("0^I", "0.0");
-		check("I^0.5", "0.7071067811865476+I*0.7071067811865475"); 
+		check("I^0.5", "0.7071067811865476+I*0.7071067811865475");
 		check("(-I)^(0.5)", "0.7071067811865476+I*(-0.7071067811865475)");
 		check("(-1)^0.5", "6.123233995736766E-17+I*1.0");
 		check("3^3", "27.0");
@@ -127,7 +127,7 @@ public class EvalComplexTestCase extends TestCase {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
 		}
-	} 
+	}
 
 	public void testEval007() {
 		try {
@@ -147,11 +147,11 @@ public class EvalComplexTestCase extends TestCase {
 			Assert.assertEquals("", e.getMessage());
 		}
 	}
-	
+
 	public void testEval010() {
 		try {
 			ComplexEvaluator engine = new ComplexEvaluator();
-			engine.defineVariable("x", new ComplexVariable(Complex.I)); 
+			engine.defineVariable("x", new ComplexVariable(Complex.I));
 			Complex c = engine.evaluate("Abs[x]");
 			assertEquals(ComplexEvaluator.toString(c), "1.0");
 		} catch (RuntimeException e) {

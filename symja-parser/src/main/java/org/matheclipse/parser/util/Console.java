@@ -32,7 +32,7 @@ import org.matheclipse.parser.client.eval.ComplexEvaluator;
 import org.matheclipse.parser.client.eval.DoubleEvaluator;
 
 /**
- * A java console program to run the DoubleEvaluator and ComplexEvaluator
+ * A java console program to run the DoubleEvaluator and ComplexEvalVisitor
  * numerical evaluators interactivly.
  *
  * @see DoubleEvaluator

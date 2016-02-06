@@ -57,12 +57,12 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
 			String symbol = functionNode.getNode(0).toString();
 			if (functionNode.size() == 2) {
-				IBooleanFunction function = getFunctionBooleanMap(symbol);
+				IBooleanFunction<T> function = getFunctionBooleanMap(symbol);
 				if (function instanceof IBooleanBoolean1Function) {
 					return ((IBooleanBoolean1Function) function).evaluate(evaluateNodeLogical(functionNode.getNode(1)));
 				}
 			} else if (functionNode.size() == 3) {
-				IBooleanFunction function = getFunctionBooleanMap(symbol);
+				IBooleanFunction<T> function = getFunctionBooleanMap(symbol);
 				if (function instanceof IBooleanFieldElement2Function) {
 					return ((IBooleanFieldElement2Function<T>) function).evaluate(evaluateNode(functionNode.getNode(1)),
 							evaluateNode(functionNode.getNode(2)));
@@ -84,8 +84,8 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 	}
 
 	/**
-	 * Evaluate an already parsed in abstract syntax tree node (ASTNode) into a
-	 * <code>DATA</code> value.
+	 * Evaluate an already parsed-in abstract syntax tree node (ASTNode) into a
+	 * <code>T</code> value.
 	 * 
 	 * @param node
 	 *            abstract syntax tree node
@@ -127,6 +127,28 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 		return null;
 	}
 
+	/**
+	 * Evaluate an already parsed-in abstract syntax tree node into a
+	 * <code>T</code> value.
+	 * 
+	 * @param node
+	 *            abstract syntax tree node
+	 * @param value
+	 *            an initial value for the node visitors <code>setup()</code>
+	 *            method.
+	 * 
+	 * @return the evaluated Complex number
+	 * 
+	 */
+	public T evaluateNode(ASTNode node, T value) {
+		try {
+			setUp(value);
+			return evaluateNode(node);
+		} finally {
+			tearDown();
+		}
+	}
+
 	public boolean evaluateNodeLogical(final ASTNode node) {
 		if (node instanceof FunctionNode) {
 			return evaluateFunctionLogical((FunctionNode) node);
@@ -146,16 +168,20 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 				"AbstractASTVisitor#evaluateNodeLogical(ASTNode) not possible for: " + node.toString());
 	}
 
-	abstract public IBooleanFunction getFunctionBooleanMap(String symbolName);
+	abstract public IBooleanFunction<T> getFunctionBooleanMap(String symbolName);
 
-	abstract public IFieldElementFunction getFunctionMap(String symbolName);
+	abstract public IFieldElementFunction<T> getFunctionMap(String symbolName);
 
 	abstract public Boolean getSymbolBooleanMap(String symbolName);
 
 	abstract public T getSymbolFieldElementMap(String symbolName);
 
+	public boolean isRelaxedSyntax() {
+		return fRelaxedSyntax;
+	}
+
 	@Override
-	public void setUp(T data) {
+	public void setUp(T value) {
 	}
 
 	@Override
@@ -199,7 +225,7 @@ public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements I
 					}
 				}
 			} else {
-				IFieldElementFunction function = getFunctionMap(symbol);
+				IFieldElementFunction<T> function = getFunctionMap(symbol);
 				if (function instanceof IFieldElementFunctionNode) {
 					return ((IFieldElementFunctionNode<T>) function).evaluate(this, functionNode);
 				}

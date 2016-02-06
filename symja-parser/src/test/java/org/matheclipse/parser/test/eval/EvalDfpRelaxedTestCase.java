@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.eval.DoubleEvaluator;
 import org.matheclipse.parser.client.eval.api.FieldElementVariable;
-import org.matheclipse.parser.client.eval.dfp.DfpEvalVisitor;
+import org.matheclipse.parser.client.eval.dfp.DfpEvaluator;
 
 import junit.framework.TestCase;
 
@@ -23,7 +23,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void check(String in, String compareWith) {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			Dfp d = engine.evaluate(in);
 			assertEquals(d.toString(), compareWith);
 		} catch (RuntimeException e) {
@@ -77,7 +77,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval003() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			Dfp d = engine.evaluate("sin(pi/2*cOs(pi))");
 			assertEquals(d.toString(), "-1.");
 		} catch (RuntimeException e) {
@@ -88,7 +88,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval004() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			FieldElementVariable<Dfp> vd = engine.defineVariable("X", 3.0);
 			Dfp d = engine.evaluate("X^2+3");
 			assertEquals(d.toString(), "12.");
@@ -103,7 +103,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval005() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			FieldElementVariable<Dfp> vd = engine.defineVariable("X", 3.0);
 			Dfp d = engine.evaluate("X^2*x^2-1");
 			assertEquals(d.toString(), "80.");
@@ -118,7 +118,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval006() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 
 			BooleanVariable vb = new BooleanVariable(true);
 			engine.defineVariable("$1", vb);
@@ -137,7 +137,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval007() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			// IDoubleValue vdi = new DoubleVariable(1.0);
 			// engine.defineVariable("$i", vdi);
 			FieldElementVariable<Dfp> vd = engine.defineVariable("$1", 3.0);
@@ -157,7 +157,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval008() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			HashSet<String> result = new HashSet<String>();
 			engine.getVariables("a+2*b+$c", result);
 			ArrayList<String> list = new ArrayList<String>();
@@ -173,7 +173,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testEval009() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 
 			BooleanVariable vb = new BooleanVariable(true);
 			engine.defineVariable("$1", vb);
@@ -190,7 +190,7 @@ public class EvalDfpRelaxedTestCase extends TestCase {
 
 	public void testMissingFunction009() {
 		try {
-			DfpEvalVisitor engine = new DfpEvalVisitor(50, true);
+			DfpEvaluator engine = new DfpEvaluator(50, true);
 			Dfp d = engine.evaluate("aTest(1.0)");
 			assertEquals(d.toString(), "");
 		} catch (RuntimeException e) {

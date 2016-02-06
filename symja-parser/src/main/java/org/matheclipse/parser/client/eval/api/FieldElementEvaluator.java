@@ -20,7 +20,6 @@ import org.matheclipse.parser.client.Parser;
 import org.matheclipse.parser.client.SyntaxError;
 import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FunctionNode;
-import org.matheclipse.parser.client.eval.BooleanVariable;
 import org.matheclipse.parser.client.operator.ASTNodeFactory;
 
 /**
@@ -35,43 +34,14 @@ import org.matheclipse.parser.client.operator.ASTNodeFactory;
  * @see org.matheclipse.parser.client.eval.ComplexEvaluator
  * @see org.matheclipse.parser.client.math.Complex
  */
-public class FieldElementEvaluator<T extends FieldElement<T>> {
+public abstract class FieldElementEvaluator<T extends FieldElement<T>> extends AbstractASTVisitor<T> {
 	protected ASTNode fNode;
-
-	protected IASTVisitor<T> fVisitor;
 
 	protected final boolean fRelaxedSyntax;
 
-	public FieldElementEvaluator(IASTVisitor<T> visitor, boolean relaxedSyntax) {
-		fVisitor = visitor;
+	public FieldElementEvaluator(boolean relaxedSyntax) {
+		super(relaxedSyntax);
 		fRelaxedSyntax = relaxedSyntax;
-	}
-
-	/**
-	 * Clear all defined variables for this evaluator.
-	 */
-	public void clearVariables() {
-		fVisitor.clearVariables();
-	}
-
-	/**
-	 * Define a boolean value for a given variable name.
-	 * 
-	 * @param variableName
-	 * @param value
-	 */
-	public void defineVariable(String variableName, BooleanVariable value) {
-		fVisitor.defineVariable(variableName, value);
-	}
-
-	/**
-	 * Define a value for a given variable name.
-	 * 
-	 * @param variableName
-	 * @param value
-	 */
-	public void defineVariable(String variableName, FieldElementVariable<T> value) {
-		fVisitor.defineVariable(variableName, value);
 	}
 
 	/**
@@ -105,73 +75,14 @@ public class FieldElementEvaluator<T extends FieldElement<T>> {
 		}
 		fNode = p.parse(expression);
 		if (fNode instanceof FunctionNode) {
-			fNode = fVisitor.optimizeFunction((FunctionNode) fNode);
+			fNode = optimizeFunction((FunctionNode) fNode);
 		}
 		return evaluateNode(fNode);
 	}
 
-	/**
-	 * Evaluate an already parsed in abstract syntax tree node into a
-	 * <code>T</code> value.
-	 * 
-	 * @param node
-	 *            abstract syntax tree node
-	 * 
-	 * @return the evaluated Complex number
-	 * 
-	 */
-	public T evaluateNode(final ASTNode node) {
-		return evaluateNode(node, null);
-	}
-
-	/**
-	 * Evaluate an already parsed in abstract syntax tree node into a
-	 * <code>T</code> value.
-	 * 
-	 * @param node
-	 *            abstract syntax tree node
-	 * @param value
-	 *            an initial value for the node visitors <code>setup()</code>
-	 *            method.
-	 * 
-	 * @return the evaluated Complex number
-	 * 
-	 */
-	public T evaluateNode(ASTNode node, T value) {
-		try {
-			fVisitor.setUp(value);
-			return fVisitor.evaluateNode(node);
-		} finally {
-			fVisitor.tearDown();
-		}
-	}
-
-	/**
-	 * Returns the data variable value to which the specified variableName is
-	 * mapped, or {@code null} if this map contains no mapping for the
-	 * variableName.
-	 * 
-	 * @param variableName
-	 * @return
-	 */
-	public FieldElementVariable<T> getVariable(String variableName) {
-		return fVisitor.getVariable(variableName);
-	}
-
+	@Override
 	public boolean isRelaxedSyntax() {
 		return fRelaxedSyntax;
-	}
-
-	/**
-	 * Optimize an already parsed in <code>functionNode</code> into an
-	 * <code>ASTNode</code>.
-	 * 
-	 * @param functionNode
-	 * @return
-	 * 
-	 */
-	public ASTNode optimizeFunction(final FunctionNode functionNode) {
-		return fVisitor.optimizeFunction(functionNode);
 	}
 
 }

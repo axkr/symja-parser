@@ -31,7 +31,7 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
  * @param <DATA_VARIABLE>
  * 
  * @see org.matheclipse.parser.client.eval.api.IASTVisitor
- * @see org.matheclipse.parser.client.eval.ComplexEvalVisitor
+ * @see org.matheclipse.parser.client.eval.ComplexEvaluator
  */
 public interface IEvaluator<T extends FieldElement<T>> {
 	/**

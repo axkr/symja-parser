@@ -17,6 +17,6 @@ package org.matheclipse.parser.client.eval.api;
 
 import org.apache.commons.math3.FieldElement;
 
-public interface IFieldElement1Function<T extends FieldElement<T>> extends IFieldElementFunction {
+public interface IFieldElement1Function<T extends FieldElement<T>> extends IFieldElementFunction<T> {
 	public T evaluate(T arg1);
 }
