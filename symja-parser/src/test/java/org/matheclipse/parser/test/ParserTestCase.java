@@ -324,4 +324,15 @@ public class ParserTestCase extends TestCase {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	public void testParserDerive() {
+		try {
+			Parser p = new Parser(true);
+			ASTNode obj = p.parse("y'''(x)");
+			assertEquals(obj.toString(), "Derivative(3)[y][x]");
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			assertEquals("", e.getMessage());
+		}
+	}
 }

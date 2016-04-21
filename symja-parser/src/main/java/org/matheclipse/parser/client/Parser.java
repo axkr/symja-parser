@@ -22,6 +22,7 @@ import org.matheclipse.parser.client.ast.ASTNode;
 import org.matheclipse.parser.client.ast.FunctionNode;
 import org.matheclipse.parser.client.ast.IConstantOperators;
 import org.matheclipse.parser.client.ast.IParserFactory;
+import org.matheclipse.parser.client.ast.IntegerNode;
 import org.matheclipse.parser.client.ast.NumberNode;
 import org.matheclipse.parser.client.ast.SymbolNode;
 import org.matheclipse.parser.client.operator.ASTNodeFactory;
@@ -314,10 +315,16 @@ public class Parser extends Scanner {
 			} else {
 				if (fToken != TT_OPERATOR) {
 					if (fToken == TT_DERIVATIVE) {
+						int derivativeCounter = 1;
 						getNextToken();
-						lhs = fFactory.createFunction(DERIVATIVE, lhs);
-						// lhs = postfixOperator.createFunction(fFactory, lhs);
-						lhs = parseArguments(lhs);
+						while (fToken == TT_DERIVATIVE) {
+							derivativeCounter++;
+							getNextToken();
+						}
+						FunctionNode head = fFactory.createFunction(DERIVATIVE, new IntegerNode(derivativeCounter));
+						FunctionNode deriv = fFactory.createAST(head);
+						deriv.add(lhs);
+						lhs = parseArguments(deriv);
 						continue;
 					}
 					break;
