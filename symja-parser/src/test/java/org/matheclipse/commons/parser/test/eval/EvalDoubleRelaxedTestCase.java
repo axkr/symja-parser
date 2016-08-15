@@ -163,11 +163,10 @@ public class EvalDoubleRelaxedTestCase extends TestCase {
 			DoubleEvaluator engine = new DoubleEvaluator(true);
 			HashSet<String> result = new HashSet<String>();
 			engine.getVariables("a+2*b+$c", result);
-			ArrayList<String> list = new ArrayList<String>();
-			for (String string : result) {
-				list.add(string);
-			}
-			Assert.assertEquals(list.toString(), "[a, b, $c]");
+			Assert.assertEquals(result.size(), 3);
+			Assert.assertTrue(result.contains("a"));
+			Assert.assertTrue(result.contains("b"));
+			Assert.assertTrue(result.contains("$c"));
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			Assert.assertEquals("", e.getMessage());
