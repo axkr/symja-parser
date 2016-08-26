@@ -58,7 +58,7 @@ public interface IParserFactory {
 	 * Get the operator for a given identifier string like Times, Plus, Sin,...
 	 * 
 	 * @param identifier
-	 * @return
+	 * @return the operator for a given identifier string like Times, Plus, Sin,...
 	 */
 	public Operator get(String identifier);
 

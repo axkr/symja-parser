@@ -58,8 +58,6 @@ public class SyntaxError extends MathRuntimeException {
 	 *
 	 * @param startOffset
 	 * @param length
-	 *
-	 * @see
 	 */
 	public SyntaxError(final int startOffset, final int rowIndx, final int columnIndx, final String currentLine, final String error, final int length) {
 		super(LocalizedFormats.ILLEGAL_STATE);

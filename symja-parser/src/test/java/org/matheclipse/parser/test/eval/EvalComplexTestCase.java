@@ -14,7 +14,6 @@ import junit.framework.TestCase;
 /**
  * Tests evaluation in <code>Complex</code> expression mode
  * 
- * @see org.matheclipse.parser.client.math.Complex
  */
 public class EvalComplexTestCase extends TestCase {
 

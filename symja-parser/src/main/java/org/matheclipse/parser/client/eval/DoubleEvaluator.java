@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
- 
+
 import org.matheclipse.parser.client.Parser;
 import org.matheclipse.parser.client.SyntaxError;
 import org.matheclipse.parser.client.ast.ASTNode;
@@ -518,7 +518,7 @@ public class DoubleEvaluator {
 	 * assignment)
 	 * 
 	 * @param Expression
-	 * @return
+	 * @return the resulting double value
 	 * @throws SyntaxError
 	 */
 	public double evaluate() {

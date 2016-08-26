@@ -329,7 +329,7 @@ public class DfpEvaluator extends FieldElementEvaluator<Dfp> {
 	 * ASTNode
 	 * 
 	 * @param expression
-	 * @return
+	 * @return the resulting ASTNode
 	 * @throws SyntaxError
 	 */
 	public static ASTNode parseNode(final int decimalDigits, String expression, boolean relaxedSyntax) {

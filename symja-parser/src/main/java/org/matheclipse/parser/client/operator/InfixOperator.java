@@ -36,7 +36,7 @@ public class InfixOperator extends Operator {
 	/**
 	 * Return the grouping of the Infix-Operator (i.e. NONE,LEFT_ASSOCIATIVE, RIGHT_ASSOCIATIVE)
 	 * 
-	 * @return
+	 * @return the grouping of the Infix-Operator 
 	 */
 	public int getGrouping() {
 		return fGrouping;

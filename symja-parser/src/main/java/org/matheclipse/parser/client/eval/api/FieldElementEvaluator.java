@@ -48,7 +48,7 @@ public abstract class FieldElementEvaluator<T extends FieldElement<T>> extends A
 	 * Reevaluate the <code>expression</code> (possibly after a new Variable
 	 * assignment)
 	 * 
-	 * @return
+	 * @return the resulting FieldElement
 	 * @throws SyntaxError
 	 */
 	public T evaluate() {

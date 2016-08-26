@@ -369,7 +369,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	 * <code>ASTNode</code>.
 	 * 
 	 * @param functionNode
-	 * @return
+	 * @return the resulting ASTNode
 	 * 
 	 */
 	@Override

@@ -245,8 +245,8 @@ public class BigFractionEvaluator extends FieldElementEvaluator<BigFraction> {
 	 * ASTNode
 	 * 
 	 * @param expression
-	 * @return
-	 * @throws SyntaxError
+	 * @return the resulting ASTNode
+	 * @throws SyntaxError 
 	 */
 	public static ASTNode parseNode(final int decimalDigits, String expression, boolean relaxedSyntax) {
 		BigFractionEvaluator dfpEvaluator = new BigFractionEvaluator(relaxedSyntax);

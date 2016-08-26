@@ -28,7 +28,6 @@ import org.matheclipse.parser.client.eval.BooleanVariable;
  * data type.
  * 
  * @param <T>
- * @param <DATA_VARIABLE>
  * 
  * @see org.matheclipse.parser.client.eval.api.IASTVisitor
  * @see org.matheclipse.parser.client.eval.ComplexEvaluator
