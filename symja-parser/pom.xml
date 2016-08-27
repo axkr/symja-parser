@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.matheclipse.parser</groupId>
+	<artifactId>symja-parser</artifactId>
+	<name>Symja Commons Math Parser</name>
+	<version>0.1.1-SNAPSHOT</version>
+	<description>Symja commons math parser provides math expressions parsers for Java double values or Apache Commons Math Complex, Dfp or BigFraction numbers.</description>
+	<url>https://github.com/axkr/symja-parser</url>
+	<inceptionYear>2016</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>Apache License</name>
+			<url>LICENSE.txt</url>
+		</license>
+	</licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+	<scm>
+		<developerConnection>scm:git:[fetch=]https://github.com/axkr/symja-parser.git[push=]git@github.com:axkr/symja-parser.git</developerConnection>
+		<tag>master</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>maven2.github.com</id>
+			<name>Maven2 GitHub Repository</name>
+			<url>file://${project.build.directory}/repo</url>
+		</repository>
+	</distributionManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version>
+		</dependency>
+		<!-- Unit testing dependencies -->
+		<!-- JUnit, http://www.junit.org -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Set Maven to compile for Java 5 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<!-- Configure the Checkstyle plugin
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<configLocation>${project.build.directory}/../checkstyle.xml</configLocation>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<encoding>UTF-8</encoding>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<failOnViolation>true</failOnViolation>
+							<violationSeverity>warning</violationSeverity>
+						</configuration>
+					</execution>
+				</executions> 
+			</plugin>
+ -->
+			<!-- Configure the source plugin to execute before the install phase -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<configuration>
+					<classpathScope>test</classpathScope>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>
