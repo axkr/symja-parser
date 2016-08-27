@@ -22,21 +22,11 @@ public class DoubleVariable implements IDoubleValue {
 		value = v;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.matheclipse.parser.eval.IDoubleValue#getValue()
-	 */
 	@Override
 	public double getValue() {
 		return value;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.matheclipse.parser.eval.IDoubleValue#setValue(double)
-	 */
 	@Override
 	public void setValue(double value) {
 		this.value = value;

@@ -17,6 +17,7 @@ package org.matheclipse.parser.client.eval.api;
 
 import org.apache.commons.math3.FieldElement;
 
+@FunctionalInterface
 public interface IBooleanBoolean1Function<T extends FieldElement<T>> extends IBooleanFunction<T> {
 	public boolean evaluate(boolean arg1);
 }

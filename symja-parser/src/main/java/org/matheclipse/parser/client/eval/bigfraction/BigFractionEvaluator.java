@@ -553,7 +553,7 @@ public class BigFractionEvaluator extends FieldElementEvaluator<BigFraction> {
 	 *             if the <code>functionNode</code> cannot be evaluated.
 	 */
 	public BigFraction evaluateFunction(final FunctionNode functionNode) {
-		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
+		if (!functionNode.isEmpty() && functionNode.getNode(0) instanceof SymbolNode) {
 			String symbol = functionNode.getNode(0).toString();
 			if (symbol.equals("If") || (fRelaxedSyntax && symbol.equalsIgnoreCase("if"))) {
 				if (functionNode.size() == 3) {
@@ -609,7 +609,7 @@ public class BigFractionEvaluator extends FieldElementEvaluator<BigFraction> {
 
 	@Override
 	public boolean evaluateFunctionLogical(final FunctionNode functionNode) {
-		if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
+		if (!functionNode.isEmpty() && functionNode.getNode(0) instanceof SymbolNode) {
 			String symbol = functionNode.getNode(0).toString();
 			if (functionNode.size() == 2) {
 				IBooleanFunction<BigFraction> function = FUNCTION_BOOLEAN_MAP.get(symbol);
@@ -772,7 +772,7 @@ public class BigFractionEvaluator extends FieldElementEvaluator<BigFraction> {
 	public void getVariables(final ASTNode node, Set<String> result) {
 		if (node instanceof FunctionNode) {
 			FunctionNode functionNode = (FunctionNode) node;
-			if (functionNode.size() > 0 && functionNode.getNode(0) instanceof SymbolNode) {
+			if (!functionNode.isEmpty() && functionNode.getNode(0) instanceof SymbolNode) {
 				for (int i = 1; i < functionNode.size(); i++) {
 					getVariables(functionNode.getNode(i), result);
 				}

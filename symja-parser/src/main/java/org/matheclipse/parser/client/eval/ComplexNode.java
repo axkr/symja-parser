@@ -63,8 +63,8 @@ public class ComplexNode extends ASTNode {
 
 	@Override
 	public int hashCode() {
-		long rbits = MathUtils.hash(value.getReal());// Double.doubleToLongBits(value.getReal());
-		long ibits = MathUtils.hash(value.getImaginary());// Double.doubleToLongBits(value.getImaginary());
+		long rbits = MathUtils.hash(value.getReal());
+		long ibits = MathUtils.hash(value.getImaginary());
 		return (int) (rbits ^ (ibits >>> 32));
 	}
 }

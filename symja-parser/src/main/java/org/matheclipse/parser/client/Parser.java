@@ -32,10 +32,13 @@ import org.matheclipse.parser.client.operator.PostfixOperator;
 import org.matheclipse.parser.client.operator.PrefixOperator;
 
 /**
- * Create an expression of the <code>ASTNode</code> class-hierarchy from a math formulas string representation
+ * Create an expression of the <code>ASTNode</code> class-hierarchy from a math
+ * formulas string representation
  * 
- * See <a href="http://en.wikipedia.org/wiki/Operator-precedence_parser">Operator -precedence parser</a> for the idea, how to parse
- * the operators depending on their precedence.
+ * See
+ * <a href="http://en.wikipedia.org/wiki/Operator-precedence_parser">Operator
+ * -precedence parser</a> for the idea, how to parse the operators depending on
+ * their precedence.
  */
 public class Parser extends Scanner {
 	/**
@@ -74,6 +77,13 @@ public class Parser extends Scanner {
 		this(factory, relaxedSyntax, false);
 	}
 
+	/**
+	 * 
+	 * @param factory
+	 * @param relaxedSyntax
+	 * @param packageMode
+	 * @throws SyntaxError
+	 */
 	public Parser(IParserFactory factory, final boolean relaxedSyntax, boolean packageMode) throws SyntaxError {
 		super(packageMode);
 		this.fRelaxedSyntax = relaxedSyntax;
@@ -174,8 +184,6 @@ public class Parser extends Scanner {
 		if (fToken == TT_OPERATOR) {
 			if (fOperatorString.equals(".")) {
 				fCurrentChar = '.';
-				// fToken = TT_DIGIT;
-				// return getPart();
 				return getNumber(false);
 			}
 			final PrefixOperator prefixOperator = determinePrefixOperator();
@@ -205,11 +213,8 @@ public class Parser extends Scanner {
 			if (fToken == TT_NEWLINE) {
 				return rhs;
 			}
-			if ((fToken == TT_LIST_OPEN) || (fToken == TT_PRECEDENCE_OPEN) || (fToken == TT_IDENTIFIER) || (fToken == TT_STRING)
-					|| (fToken == TT_DIGIT)) {
-				// if (fPackageMode && fRecursionDepth < 1) {
-				// return rhs;
-				// }
+			if ((fToken == TT_LIST_OPEN) || (fToken == TT_PRECEDENCE_OPEN) || (fToken == TT_IDENTIFIER)
+					|| (fToken == TT_STRING) || (fToken == TT_DIGIT)) {
 				// lazy evaluation of multiplication
 				InfixOperator timesOperator = (InfixOperator) fFactory.get("Times");
 				if (timesOperator.getPrecedence() > min_precedence) {
@@ -227,7 +232,8 @@ public class Parser extends Scanner {
 				InfixOperator infixOperator = determineBinaryOperator();
 				if (infixOperator != null) {
 					if (infixOperator.getPrecedence() > min_precedence
-							|| ((infixOperator.getPrecedence() == min_precedence) && (infixOperator.getGrouping() == InfixOperator.RIGHT_ASSOCIATIVE))) {
+							|| ((infixOperator.getPrecedence() == min_precedence)
+									&& (infixOperator.getGrouping() == InfixOperator.RIGHT_ASSOCIATIVE))) {
 						if (infixOperator.getOperatorString().equals(";")) {
 							if (fPackageMode && fRecursionDepth < 1) {
 								return infixOperator.createFunction(fFactory, rhs, fFactory.createSymbol("Null"));
@@ -237,18 +243,6 @@ public class Parser extends Scanner {
 						continue;
 					}
 
-					// if (infixOperator.getPrecedence() > min_precedence) {
-					// ASTNode compoundExpressionNull = parseCompoundExpressionNull(infixOperator, rhs);
-					// if (compoundExpressionNull != null) {
-					// return compoundExpressionNull;
-					// }
-					// rhs = parseOperators(rhs, infixOperator.getPrecedence());
-					// continue;
-					// } else if ((infixOperator.getPrecedence() == min_precedence)
-					// && (infixOperator.getGrouping() == InfixOperator.RIGHT_ASSOCIATIVE)) {
-					// rhs = parseOperators(rhs, infixOperator.getPrecedence());
-					// continue;
-					// }
 				} else {
 					PostfixOperator postfixOperator = determinePostfixOperator();
 					if (postfixOperator != null) {
@@ -279,8 +273,9 @@ public class Parser extends Scanner {
 	}
 
 	/**
-	 * See <a href="http://en.wikipedia.org/wiki/Operator-precedence_parser">Operator -precedence parser</a> for the idea, how to
-	 * parse the operators depending on their precedence.
+	 * See <a href="http://en.wikipedia.org/wiki/Operator-precedence_parser">
+	 * Operator -precedence parser</a> for the idea, how to parse the operators
+	 * depending on their precedence.
 	 * 
 	 * @param lhs
 	 *            the already parsed left-hand-side of the operator
@@ -296,20 +291,14 @@ public class Parser extends Scanner {
 			if (fToken == TT_NEWLINE) {
 				return lhs;
 			}
-			if ((fToken == TT_LIST_OPEN) || (fToken == TT_PRECEDENCE_OPEN) || (fToken == TT_IDENTIFIER) || (fToken == TT_STRING)
-					|| (fToken == TT_DIGIT) || (fToken == TT_SLOT) || (fToken == TT_SLOTSEQUENCE)) {
-				// if (fPackageMode && fRecursionDepth < 1) {
-				// return lhs;
-				// }
-				// if (fPackageMode && fToken == TT_IDENTIFIER && fLastChar == '\n') {
-				// return lhs;
-				// }
+			if ((fToken == TT_LIST_OPEN) || (fToken == TT_PRECEDENCE_OPEN) || (fToken == TT_IDENTIFIER)
+					|| (fToken == TT_STRING) || (fToken == TT_DIGIT) || (fToken == TT_SLOT)
+					|| (fToken == TT_SLOTSEQUENCE)) {
 				// lazy evaluation of multiplication
 				oper = fFactory.get("Times");
 				if (oper.getPrecedence() >= min_precedence) {
 					rhs = parseLookaheadOperator(oper.getPrecedence());
 					lhs = fFactory.createFunction(fFactory.createSymbol(oper.getFunctionName()), lhs, rhs);
-					// lhs = parseArguments(lhs);
 					continue;
 				}
 			} else {
@@ -420,7 +409,6 @@ public class Parser extends Scanner {
 			}
 			temp = parseOperators(parsePrimary(), 0);
 			fNodeList.add(temp);
-			// throwSyntaxError("End-of-file not reached.");
 		}
 
 		return fNodeList;
@@ -446,13 +434,10 @@ public class Parser extends Scanner {
 			} else {
 				temp = fFactory.createInteger(number, numFormat);
 			}
-		} catch (final Throwable e) {
+		} catch (final Exception e) {
 			throwSyntaxError("Number format error: " + number, number.length());
 		}
 		getNextToken();
-		// if (fToken == TT_PRECEDENCE_OPEN) {
-		// return getTimes(temp);
-		// }
 		return temp;
 	}
 
@@ -488,7 +473,7 @@ public class Parser extends Scanner {
 	}
 
 	private ASTNode getString() throws SyntaxError {
-		final StringBuffer ident = getStringBuffer();
+		final StringBuilder ident = getStringBuffer();
 
 		getNextToken();
 
@@ -810,7 +795,8 @@ public class Parser extends Scanner {
 		} else if (fToken == TT_SLOTSEQUENCE) {
 
 			getNextToken();
-			final FunctionNode slotSequencce = fFactory.createFunction(fFactory.createSymbol(IConstantOperators.SlotSequence));
+			final FunctionNode slotSequencce = fFactory
+					.createFunction(fFactory.createSymbol(IConstantOperators.SlotSequence));
 			if (fToken == TT_DIGIT) {
 				slotSequencce.add(getNumber(false));
 			} else {
@@ -829,8 +815,10 @@ public class Parser extends Scanner {
 		case TT_ARGUMENTS_CLOSE:
 			throwSyntaxError("Too much closing ] in factor.");
 			break;
+		default:
+			throwSyntaxError("Error in factor at character: '" + fCurrentChar + "' (" + fToken + ")");
+			return null;
 		}
-
 		throwSyntaxError("Error in factor at character: '" + fCurrentChar + "' (" + fToken + ")");
 		return null;
 	}
@@ -852,7 +840,8 @@ public class Parser extends Scanner {
 	}
 
 	/**
-	 * Get a <i>part [[..]]</i> of an expression <code>{a,b,c}[[2]]</code> &rarr; <code>b</code>
+	 * Get a <i>part [[..]]</i> of an expression <code>{a,b,c}[[2]]</code>
+	 * &rarr; <code>b</code>
 	 * 
 	 */
 	private ASTNode getPart() throws SyntaxError {
@@ -897,7 +886,6 @@ public class Parser extends Scanner {
 				if (fToken != TT_PARTCLOSE) {
 					throwSyntaxError("']]' expected.");
 				}
-				// }
 			} finally {
 				fRecursionDepth--;
 			}

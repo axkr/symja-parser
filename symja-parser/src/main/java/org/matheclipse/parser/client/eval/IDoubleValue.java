@@ -15,10 +15,24 @@
  */
 package org.matheclipse.parser.client.eval;
 
+/**
+ * Interface for wrapping a double value
+ * 
+ *
+ */
 public interface IDoubleValue {
 
+	/**
+	 * 
+	 * @return the wrapped double value
+	 */
 	public abstract double getValue();
 
+	/**
+	 * Set the double value.
+	 * 
+	 * @param value
+	 */
 	public abstract void setValue(double value);
 
 }

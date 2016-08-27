@@ -90,30 +90,32 @@ public class Scanner {
 	/**
 	 * Token type: opening bracket '(' for sub-formulas with higher precedence
 	 */
-	final static public int TT_PRECEDENCE_OPEN = 14;
+	public static final int TT_PRECEDENCE_OPEN = 14;
 
 	/**
 	 * Token type: closing bracket ')' for sub-formulas with higher precedence
 	 */
-	final static public int TT_PRECEDENCE_CLOSE = 15;
+	public static final int TT_PRECEDENCE_CLOSE = 15;
 
 	/**
 	 * Token type: opening curly braces '{' for starting lists
 	 */
-	final static public int TT_LIST_OPEN = 16;
+	public static final int TT_LIST_OPEN = 16;
 
 	/**
 	 * Token type: closing curly braces '}' for ending lists
 	 */
-	final static public int TT_LIST_CLOSE = 17;
+	public static final int TT_LIST_CLOSE = 17;
 
 	/**
-	 * Token type: opening brackets for starting the &quot;index part&quot; of an expression
+	 * Token type: opening brackets for starting the &quot;index part&quot; of
+	 * an expression
 	 */
 	final static public int TT_PARTOPEN = 18;
 
 	/**
-	 * Token type: closing brackets for ending the &quot;index part&quot; of an expression
+	 * Token type: closing brackets for ending the &quot;index part&quot; of an
+	 * expression
 	 */
 	final static public int TT_PARTCLOSE = 19;
 
@@ -172,19 +174,20 @@ public class Scanner {
 	final static public int TT_BLANK_OPTIONAL = 145;
 
 	final static public int TT_DERIVATIVE = 146;
-	
+
 	final static public int TT_NEWLINE = 150;
-	
+
 	// ----------------optimized identifier managment------------------
 	static final String string_a = "a", string_b = "b", string_c = "c", string_d = "d", string_e = "e", string_f = "f",
-			string_g = "g", string_h = "h", string_i = "i", string_j = "j", string_k = "k", string_l = "l", string_m = "m",
-			string_n = "n", string_o = "o", string_p = "p", string_q = "q", string_r = "r", string_s = "s", string_t = "t",
-			string_u = "u", string_v = "v", string_w = "w", string_x = "x", string_y = "y", string_z = "z";
+			string_g = "g", string_h = "h", string_i = "i", string_j = "j", string_k = "k", string_l = "l",
+			string_m = "m", string_n = "n", string_o = "o", string_p = "p", string_q = "q", string_r = "r",
+			string_s = "s", string_t = "t", string_u = "u", string_v = "v", string_w = "w", string_x = "x",
+			string_y = "y", string_z = "z";
 
-	static final String var_a = "$a", var_b = "$b", var_c = "$c", var_d = "$d", var_e = "$e", var_f = "$f", var_g = "$g",
-			var_h = "$h", var_i = "$i", var_j = "$j", var_k = "$k", var_l = "$l", var_m = "$m", var_n = "$n", var_o = "$o",
-			var_p = "$p", var_q = "$q", var_r = "$r", var_s = "$s", var_t = "$t", var_u = "$u", var_v = "$v", var_w = "$w",
-			var_x = "$x", var_y = "$y", var_z = "$z";
+	static final String var_a = "$a", var_b = "$b", var_c = "$c", var_d = "$d", var_e = "$e", var_f = "$f",
+			var_g = "$g", var_h = "$h", var_i = "$i", var_j = "$j", var_k = "$k", var_l = "$l", var_m = "$m",
+			var_n = "$n", var_o = "$o", var_p = "$p", var_q = "$q", var_r = "$r", var_s = "$s", var_t = "$t",
+			var_u = "$u", var_v = "$v", var_w = "$w", var_x = "$x", var_y = "$y", var_z = "$z";
 
 	protected int numFormat = 0;
 
@@ -192,7 +195,7 @@ public class Scanner {
 
 	protected final boolean fPackageMode;
 
-	private static HashMap<String, String> CHAR_MAP = new HashMap<String, String>(1024);
+	private static HashMap<String, String> CHAR_MAP = new HashMap<>(1024);
 
 	static {
 		CHAR_MAP.put("CenterEllipsis", "\u22EF");
@@ -201,6 +204,9 @@ public class Scanner {
 	/**
 	 * Initialize Scanner without a math-expression
 	 * 
+	 * @param packageMode
+	 *            in package mode expressions are read from a file with
+	 *            expressions separated by new-line characters
 	 */
 	public Scanner(boolean packageMode) {
 		fPackageMode = packageMode;
@@ -224,8 +230,9 @@ public class Scanner {
 	}
 
 	/**
-	 * Verify the length of the input string and get the next character from the input string. If the current position is greater
-	 * than the input length, set current character to SPACE and token to TT_EOF.
+	 * Verify the length of the input string and get the next character from the
+	 * input string. If the current position is greater than the input length,
+	 * set current character to SPACE and token to TT_EOF.
 	 * 
 	 */
 	private void getChar() {
@@ -292,6 +299,9 @@ public class Scanner {
 
 	/**
 	 * Get the next token from the input string
+	 * 
+	 * @return <code>true</code> if the next character in the input is a
+	 *         whitespace character.
 	 */
 	protected boolean isWhitespace() {
 		if (fInputString.length() > fCurrentPosition) {
@@ -302,11 +312,12 @@ public class Scanner {
 
 	/**
 	 * Get the next token from the input string
+	 * 
+	 * @throws SyntaxError
 	 */
 	protected void getNextToken() throws SyntaxError {
 
 		while (fInputString.length() > fCurrentPosition) {
-			// fCurrentChar = fInputString.charAt(fCurrentPosition++);
 			getNextChar();
 			fToken = TT_EOF;
 
@@ -329,8 +340,7 @@ public class Scanner {
 				if (((fCurrentChar >= 'a') && (fCurrentChar <= 'z')) || ((fCurrentChar >= 'A') && (fCurrentChar <= 'Z'))
 						|| (fCurrentChar == '$')) {
 					// the Character.isUnicodeIdentifierStart method doesn't
-					// work in Google Web Toolkit:
-					// || (Character.isUnicodeIdentifierStart(fCurrentChar))) {
+					// work in Google Web Toolkit 
 					fToken = TT_IDENTIFIER;
 					return;
 				}
@@ -339,13 +349,10 @@ public class Scanner {
 
 					return;
 				}
-				if (fCurrentChar == '(') {
-					if (fInputString.length() > fCurrentPosition) {
-						if (fInputString.charAt(fCurrentPosition) == '*') {
-							getComment();
-							continue;
-						}
-					}
+				if (fCurrentChar == '(' && fInputString.length() > fCurrentPosition
+						&& fInputString.charAt(fCurrentPosition) == '*') {
+					getComment();
+					continue;
 				}
 
 				switch (fCurrentChar) {
@@ -368,12 +375,9 @@ public class Scanner {
 					break;
 				case '[':
 					fToken = TT_ARGUMENTS_OPEN;
-					if (fInputString.length() > fCurrentPosition) {
-						if (fInputString.charAt(fCurrentPosition) == '[') {
-							fCurrentPosition++;
-							fToken = TT_PARTOPEN;
-							break;
-						}
+					if (fInputString.length() > fCurrentPosition && fInputString.charAt(fCurrentPosition) == '[') {
+						fCurrentPosition++;
+						fToken = TT_PARTOPEN;
 					}
 					break;
 				case ']':
@@ -388,12 +392,11 @@ public class Scanner {
 					if (fInputString.length() > fCurrentPosition) {
 						if (fInputString.charAt(fCurrentPosition) == '_') {
 							fCurrentPosition++;
-							if (fInputString.length() > fCurrentPosition) {
-								if (fInputString.charAt(fCurrentPosition) == '_') {
-									fCurrentPosition++;
-									fToken = TT_BLANK_BLANK_BLANK;
-									break;
-								}
+							if (fInputString.length() > fCurrentPosition
+									&& fInputString.charAt(fCurrentPosition) == '_') {
+								fCurrentPosition++;
+								fToken = TT_BLANK_BLANK_BLANK;
+								break;
 							}
 							fToken = TT_BLANK_BLANK;
 							break;
@@ -406,15 +409,11 @@ public class Scanner {
 
 					break;
 				case '.':
-					// token = TT_DOT;
-					if (fInputString.length() > fCurrentPosition) {
-						if ((fInputString.charAt(fCurrentPosition) >= '0') && (fInputString.charAt(fCurrentPosition) <= '9')) {
-							// don't increment fCurrentPosition (see
-							// getNumberString())
-							// fCurrentPosition++;
-							fToken = TT_DIGIT; // floating-point number
-							break;
-						}
+					if (fInputString.length() > fCurrentPosition && (fInputString.charAt(fCurrentPosition) >= '0')
+							&& (fInputString.charAt(fCurrentPosition) <= '9')) {
+						// don't increment fCurrentPosition (see
+						// getNumberString())
+						fToken = TT_DIGIT; // floating-point number
 					}
 
 					break;
@@ -431,13 +430,9 @@ public class Scanner {
 					break;
 				case '#':
 					fToken = TT_SLOT;
-					if (fInputString.length() > fCurrentPosition) {
-						if (fInputString.charAt(fCurrentPosition) == '#') {
-							fCurrentPosition++;
-							fToken = TT_SLOTSEQUENCE;
-
-							break;
-						}
+					if (fInputString.length() > fCurrentPosition && fInputString.charAt(fCurrentPosition) == '#') {
+						fCurrentPosition++;
+						fToken = TT_SLOTSEQUENCE;
 					}
 
 					break;
@@ -456,6 +451,7 @@ public class Scanner {
 		fCurrentPosition = fInputString.length() + 1;
 		fCurrentChar = ' ';
 		fToken = TT_EOF;
+
 	}
 
 	private void getComment() {
@@ -473,7 +469,8 @@ public class Scanner {
 					}
 					level--;
 					continue;
-				} else if (fInputString.charAt(fCurrentPosition) == '(' && fInputString.charAt(fCurrentPosition + 1) == '*') {
+				} else if (fInputString.charAt(fCurrentPosition) == '('
+						&& fInputString.charAt(fCurrentPosition + 1) == '*') {
 					fCurrentPosition++;
 					fCurrentPosition++;
 					level++;
@@ -493,8 +490,8 @@ public class Scanner {
 	}
 
 	protected void throwSyntaxError(final String error) throws SyntaxError {
-		throw new SyntaxError(fCurrentPosition - 1, rowCount, fCurrentPosition - fCurrentColumnStartPosition, getErrorLine(),
-				error, 1);
+		throw new SyntaxError(fCurrentPosition - 1, rowCount, fCurrentPosition - fCurrentColumnStartPosition,
+				getErrorLine(), error, 1);
 	}
 
 	protected void throwSyntaxError(final String error, final int errorLength) throws SyntaxError {
@@ -515,8 +512,7 @@ public class Scanner {
 				break;
 			}
 		}
-		final String line = fInputString.substring(fCurrentColumnStartPosition, eol);
-		return line;
+		return fInputString.substring(fCurrentColumnStartPosition, eol);
 	}
 
 	protected String getIdentifier() {
@@ -707,6 +703,7 @@ public class Scanner {
 				startPosition = fCurrentPosition;
 				getChar();
 				break;
+			default:
 			}
 		}
 
@@ -725,19 +722,12 @@ public class Scanner {
 			}
 		} else {
 			while (((fCurrentChar >= '0') && (fCurrentChar <= '9')) || (fCurrentChar == '.')) {
-				// if ((ch == '.') || (ch == 'E') || (ch == 'e')) {
 				if (fCurrentChar == '.') {
 					if ((fCurrentChar == '.') && (dFlag != ' ')) {
 						break;
 					}
-					// if ((dFlag == 'E') || (dFlag == 'e')) {
-					// break;
-					// }
 					dFlag = fCurrentChar;
 					getChar();
-					// if ((ch == '-') || (ch == '+')) {
-					// getChar();
-					// }
 				} else {
 					getChar();
 				}
@@ -752,7 +742,7 @@ public class Scanner {
 				if ((fCurrentChar == '+') || (fCurrentChar == '-')) {
 					getChar();
 				}
-				while (((fCurrentChar >= '0') && (fCurrentChar <= '9'))) {
+				while ((fCurrentChar >= '0') && (fCurrentChar <= '9')) {
 					getChar();
 				}
 			} else {
@@ -764,8 +754,8 @@ public class Scanner {
 						if ((fCurrentChar == '+') || (fCurrentChar == '-')) {
 							getChar();
 						}
-						if (((fCurrentChar >= '0') && (fCurrentChar <= '9'))) {
-							while (((fCurrentChar >= '0') && (fCurrentChar <= '9'))) {
+						if ((fCurrentChar >= '0') && (fCurrentChar <= '9')) {
+							while ((fCurrentChar >= '0') && (fCurrentChar <= '9')) {
 								getChar();
 							}
 						} else {
@@ -777,15 +767,14 @@ public class Scanner {
 				}
 			}
 		}
-		// }
 		int endPosition = fCurrentPosition--;
 		result[0] = fInputString.substring(startPosition, --endPosition);
 		result[1] = Integer.valueOf(numFormat);
 		return result;
 	}
 
-	protected StringBuffer getStringBuffer() throws SyntaxError {
-		final StringBuffer ident = new StringBuffer();
+	protected StringBuilder getStringBuffer() throws SyntaxError {
+		final StringBuilder ident = new StringBuilder();
 
 		getChar();
 
@@ -794,7 +783,7 @@ public class Scanner {
 		}
 
 		while (fCurrentChar != '"') {
-			if ((fCurrentChar == '\\')) {
+			if (fCurrentChar == '\\') {
 				getChar();
 
 				switch (fCurrentChar) {
@@ -817,8 +806,6 @@ public class Scanner {
 
 				getChar();
 			} else {
-				// if ((fCurrentChar != '"') && ((fCurrentChar == '\n') || (fToken ==
-				// TT_EOF))) {
 				if ((fCurrentChar != '"') && (fToken == TT_EOF)) {
 					throwSyntaxError("string -" + ident.toString() + "- not closed.");
 				}

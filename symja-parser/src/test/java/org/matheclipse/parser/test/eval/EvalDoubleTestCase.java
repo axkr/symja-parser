@@ -161,9 +161,8 @@ public class EvalDoubleTestCase extends TestCase {
 
 	public void testEval008() {
 		try {
-			DoubleEvaluator engine = new DoubleEvaluator();
 			HashSet<String> result = new HashSet<String>();
-			engine.getVariables("a+2*b+$c", result);
+			DoubleEvaluator.getVariables("a+2*b+$c", result);
 			ArrayList<String> list = new ArrayList<String>();
 			for (String string : result) {
 				list.add(string);

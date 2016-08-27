@@ -15,7 +15,25 @@
  */
 package org.matheclipse.parser.client.eval;
 
-
-public interface IBooleanDouble2Function {
-  public boolean evaluate(double arg1, double arg2);
+/**
+ * Represents a predicate (boolean-valued function) of two double-valued
+ * arguments.
+ * 
+ * This is a functional interface whose functional method is
+ * <code>test(double, double)</code>.
+ *
+ */
+@FunctionalInterface
+public interface DoubleBinaryPredicate {
+	/**
+	 * Evaluates this predicate on the given arguments.
+	 * 
+	 * @param arg1
+	 *            the first input argument
+	 * @param arg2
+	 *            the second input argument
+	 * @return <code>true</code> if the input argument matches the predicate,
+	 *         otherwise <code>false</code>
+	 */
+	public boolean test(double arg1, double arg2);
 }

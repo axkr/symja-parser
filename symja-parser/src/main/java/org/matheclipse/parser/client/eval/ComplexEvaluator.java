@@ -57,7 +57,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	static class ArcTanFunction implements IFieldElement1Function<Complex> {
 		@Override
 		public Complex evaluate(Complex arg1) {
-			return arg1.atan();// ComplexUtils.atan(arg1);
+			return arg1.atan();
 		}
 
 	}
@@ -65,16 +65,15 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	static class LogFunction implements IFieldElement1Function<Complex>, IFieldElement2Function<Complex> {
 		@Override
 		public Complex evaluate(Complex arg1) {
-			return arg1.log();// ComplexUtils.log(arg1);
+			return arg1.log();
 		}
 
 		@Override
 		public Complex evaluate(Complex base, Complex z) {
-			return z.log().divide(base.log());// ComplexUtils.log(z).divide(ComplexUtils.log(base));
+			return z.log().divide(base.log());
 		}
 	}
 
-	// private static double EPSILON = 1.0e-15;
 	private static Map<String, IBooleanFunction<Complex>> FUNCTION_BOOLEAN_MAP;
 
 	private static Map<String, Complex> SYMBOL_MAP;
@@ -84,7 +83,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	private static Map<String, IFieldElementFunction<Complex>> FUNCTION_MAP;
 
 	static {
-		FUNCTION_BOOLEAN_MAP = new ConcurrentHashMap<String, IBooleanFunction<Complex>>();
+		FUNCTION_BOOLEAN_MAP = new ConcurrentHashMap<>();
 
 		FUNCTION_BOOLEAN_MAP.put("And", new IBooleanBoolean2Function<Complex>() {
 			@Override
@@ -119,7 +118,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 			}
 		});
 
-		SYMBOL_MAP = new ConcurrentHashMap<String, Complex>();
+		SYMBOL_MAP = new ConcurrentHashMap<>();
 		SYMBOL_MAP.put("Catalan", new Complex(0.91596559417721901505460351493238411077414937428167, 0.0));
 		SYMBOL_MAP.put("Degree", new Complex(Math.PI / 180, 0.0));
 		SYMBOL_MAP.put("E", new Complex(Math.E, 0.0));
@@ -130,11 +129,11 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 		SYMBOL_MAP.put("GoldenRatio", new Complex(1.6180339887498948482045868343656381177203091798058, 0.0));
 		SYMBOL_MAP.put("Khinchin", new Complex(2.6854520010653064453097148354817956938203822939945, 0.0));
 
-		SYMBOL_BOOLEAN_MAP = new ConcurrentHashMap<String, Boolean>();
+		SYMBOL_BOOLEAN_MAP = new ConcurrentHashMap<>();
 		SYMBOL_BOOLEAN_MAP.put("False", Boolean.FALSE);
 		SYMBOL_BOOLEAN_MAP.put("True", Boolean.TRUE);
 
-		FUNCTION_MAP = new ConcurrentHashMap<String, IFieldElementFunction<Complex>>();
+		FUNCTION_MAP = new ConcurrentHashMap<>();
 		FUNCTION_MAP.put("ArcTan", new ArcTanFunction());
 		FUNCTION_MAP.put("Log", new LogFunction());
 		FUNCTION_MAP.put("CompoundExpression", new CompoundExpressionFunction<Complex>());
@@ -162,62 +161,62 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 		FUNCTION_MAP.put("ArcCos", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.acos();// acos(arg1);
+				return arg1.acos();
 			}
 		});
 		FUNCTION_MAP.put("ArcSin", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.asin();// asin(arg1);
+				return arg1.asin();
 			}
 		});
 
 		FUNCTION_MAP.put("Cos", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.cos();// cos(arg1);
+				return arg1.cos();
 			}
 		});
 		FUNCTION_MAP.put("Cosh", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.cosh();// cosh(arg1);
+				return arg1.cosh();
 			}
 		});
 		FUNCTION_MAP.put("Exp", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.exp();// exp(arg1);
+				return arg1.exp();
 			}
 		});
 		FUNCTION_MAP.put("Sin", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.sin();// sin(arg1);
+				return arg1.sin();
 			}
 		});
 		FUNCTION_MAP.put("Sinh", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.sinh();// sinh(arg1);
+				return arg1.sinh();
 			}
 		});
 		FUNCTION_MAP.put("Sqrt", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.sqrt();// sqrt(arg1);
+				return arg1.sqrt();
 			}
 		});
 		FUNCTION_MAP.put("Tan", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.tan();// tan(arg1);
+				return arg1.tan();
 			}
 		});
 		FUNCTION_MAP.put("Tanh", new IFieldElement1Function<Complex>() {
 			@Override
 			public Complex evaluate(Complex arg1) {
-				return arg1.tanh();// tanh(arg1);
+				return arg1.tanh();
 			}
 		});
 
@@ -256,12 +255,12 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 		double real = c.getReal();
 		double imag = c.getImaginary();
 		if (imag == 0.0) {
-			return Double.valueOf(real).toString();
+			return Double.toString(real);
 		} else {
 			if (imag >= 0.0) {
-				return Double.valueOf(real).toString() + "+I*" + Double.valueOf(imag).toString();
+				return Double.toString(real) + "+I*" + Double.toString(imag);
 			} else {
-				return Double.valueOf(real).toString() + "+I*(" + Double.valueOf(imag).toString() + ")";
+				return Double.toString(real) + "+I*(" + Double.toString(imag) + ")";
 			}
 		}
 	}
@@ -272,21 +271,19 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 
 	public ComplexEvaluator(boolean relaxedSyntax) {
 		super(relaxedSyntax);
-		if (fRelaxedSyntax) {
-			if (SYMBOL_MAP.get("pi") == null) {
-				// init tables for relaxed mode
-				for (String key : SYMBOL_MAP.keySet()) {
-					SYMBOL_MAP.put(key.toLowerCase(), SYMBOL_MAP.get(key));
-				}
-				for (String key : SYMBOL_BOOLEAN_MAP.keySet()) {
-					SYMBOL_BOOLEAN_MAP.put(key.toLowerCase(), SYMBOL_BOOLEAN_MAP.get(key));
-				}
-				for (String key : FUNCTION_MAP.keySet()) {
-					FUNCTION_MAP.put(key.toLowerCase(), FUNCTION_MAP.get(key));
-				}
-				for (String key : FUNCTION_BOOLEAN_MAP.keySet()) {
-					FUNCTION_BOOLEAN_MAP.put(key.toLowerCase(), FUNCTION_BOOLEAN_MAP.get(key));
-				}
+		if (fRelaxedSyntax && SYMBOL_MAP.get("pi") == null) {
+			// init tables for relaxed mode
+			for (Map.Entry<String, Complex> entry : SYMBOL_MAP.entrySet()) {
+				SYMBOL_MAP.put(entry.getKey().toLowerCase(), entry.getValue());
+			}
+			for (Map.Entry<String, Boolean> entry : SYMBOL_BOOLEAN_MAP.entrySet()) {
+				SYMBOL_BOOLEAN_MAP.put(entry.getKey().toLowerCase(), entry.getValue());
+			}
+			for (Map.Entry<String, IFieldElementFunction<Complex>> entry : FUNCTION_MAP.entrySet()) {
+				FUNCTION_MAP.put(entry.getKey().toLowerCase(), entry.getValue());
+			}
+			for (Map.Entry<String, IBooleanFunction<Complex>> entry : FUNCTION_BOOLEAN_MAP.entrySet()) {
+				FUNCTION_BOOLEAN_MAP.put(entry.getKey().toLowerCase(), entry.getValue());
 			}
 		}
 	}
@@ -374,7 +371,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	 */
 	@Override
 	public ASTNode optimizeFunction(final FunctionNode functionNode) {
-		if (functionNode.size() > 0) {
+		if (!functionNode.isEmpty()) {
 			boolean complexOnly = true;
 			ASTNode node;
 			for (int i = 1; i < functionNode.size(); i++) {
@@ -416,6 +413,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 
 	@Override
 	public void tearDown() {
+		// no action necessary
 	}
 
 	@Override
@@ -452,7 +450,7 @@ public class ComplexEvaluator extends FieldElementEvaluator<Complex> {
 	public Complex visit(StringNode node) {
 		return null;
 	}
-	
+
 	@Override
 	public Complex visit(SymbolNode node) {
 		FieldElementVariable<Complex> v = fVariableMap.get(node.toString());
