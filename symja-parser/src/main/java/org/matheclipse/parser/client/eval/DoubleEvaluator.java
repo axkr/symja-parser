@@ -40,8 +40,6 @@ import org.matheclipse.parser.client.operator.ASTNodeFactory;
  */
 public class DoubleEvaluator {
 
-	private static final boolean DEBUG = false;
-
 	public static double EPSILON = 1.0e-15;
 
 	private static Map<String, Double> SYMBOL_DOUBLE_MAP;
@@ -104,9 +102,6 @@ public class DoubleEvaluator {
 			int end = function.size();
 			for (int i = 1; i < end; i++) {
 				result = engine.evaluateNode(function.getNode(i));
-				if (DEBUG) {
-					System.out.println(result);
-				}
 			}
 			return result;
 		}
