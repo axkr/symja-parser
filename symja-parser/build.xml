@@ -28,17 +28,17 @@
 	<target name="compile" description="Compile the Symja Parser sources to subdirectory &quot;/build/classes&quot;" depends="clean">
 		<mkdir dir="${classes.dir}" />
 		<copy file="src/main/java/META-INF/MANIFEST.MF" todir="${classes.dir}/META-INF" />
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" source="1.7" target="1.7" debug="true" includeantruntime="false" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" source="1.8" target="1.8" debug="true" includeantruntime="false" />
 	</target>
 
 	<!-- Generate javadocs for current project into ${doc.dir} -->
 	<target name="doc" depends="compile" description="Generate Javadoc documentation in subdirectory &quot;/build/javadoc&quot;">
-		<javadoc sourcepath="${src.dir}" encoding="utf-8" packagenames="org.matheclipse.parser.*" destdir="${doc.dir}" />
+		<javadoc sourcepath="${src.dir}" encoding="utf-8" packagenames="org.matheclipse.commons.parser.*" destdir="${doc.dir}" />
 	</target>
 
-	<target name="jar" description="Create full &quot;/build/jar/symja-parserYYYY-MM-DD.jar&quot; file for download" depends="doc">
+	<target name="jar" description="Create full &quot;/build/jar/commons-parserYYYY-MM-DD.jar&quot; file for download" depends="doc">
 		<mkdir dir="${jar.dir}" /> 
-		<jar manifest="${classes.dir}/META-INF/MANIFEST.MF" destfile="${jar.dir}/symja-parser${date}.jar" basedir="${classes.dir}">
+		<jar manifest="${classes.dir}/META-INF/MANIFEST.MF" destfile="${jar.dir}/commons-parser${date}.jar" basedir="${classes.dir}">
 
 		</jar>
 	</target>
