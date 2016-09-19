@@ -13,9 +13,6 @@ public class CompoundExpressionFunction<T extends FieldElement<T>> implements IF
 		int end = function.size();
 		for (int i = 1; i < end; i++) {
 			result = engine.evaluateNode(function.getNode(i));
-			if (AbstractASTVisitor.DEBUG) {
-				System.out.println(result);
-			}
 		}
 		return result;
 	}

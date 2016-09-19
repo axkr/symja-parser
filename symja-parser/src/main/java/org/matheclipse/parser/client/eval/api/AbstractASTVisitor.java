@@ -39,7 +39,6 @@ import org.matheclipse.parser.client.math.ArithmeticMathException;
  * @param <T>
  */
 public abstract class AbstractASTVisitor<T extends FieldElement<T>> implements IASTVisitor<T> {
-	public final static boolean DEBUG = false;
 
 	protected Map<String, FieldElementVariable<T>> fVariableMap;
 

@@ -165,11 +165,11 @@ public class Console {
 	}
 
 	/**
-	 * Evaluates the given string-expression and returns the result in
-	 * <code>OutputForm</code>
+	 * Evaluates the given string-expression and returns the result in string
+	 * form.
 	 * 
 	 * @param strEval
-	 * 
+	 * @return the result in string for
 	 */
 	public String interpreter(final String strEval) {
 		try {
