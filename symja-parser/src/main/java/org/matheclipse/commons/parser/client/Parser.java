@@ -182,6 +182,13 @@ public class Parser extends Scanner {
 
 	private ASTNode parsePrimary() {
 		if (fToken == TT_OPERATOR) {
+			if (";;".equals(fOperatorString)) {
+				FunctionNode function = fFactory.createFunction(fFactory.createSymbol(IConstantOperators.Span));
+				function.add(fFactory.createInteger(1));
+				function.add(fFactory.createSymbol(IConstantOperators.All));
+				getNextToken();
+				return function;
+			}
 			if (fOperatorString.equals(".")) {
 				fCurrentChar = '.';
 				return getNumber(false);
@@ -190,7 +197,7 @@ public class Parser extends Scanner {
 			if (prefixOperator != null) {
 				getNextToken();
 				final ASTNode temp = parseLookaheadOperator(prefixOperator.getPrecedence());
-				if (prefixOperator.getFunctionName().equals("PreMinus")) {
+				if ("PreMinus".equals(prefixOperator.getFunctionName())) {
 					// special cases for negative numbers
 					if (temp instanceof NumberNode) {
 						((NumberNode) temp).toggleSign();
