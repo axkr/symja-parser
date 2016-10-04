@@ -4,7 +4,7 @@
 	<groupId>org.matheclipse</groupId>
 	<artifactId>commons-parser</artifactId>
 	<name>Symja Commons Math Parser</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<description>Symja commons math parser provides math expressions parsers for Java double values or Apache Commons Math Complex, Dfp or BigFraction numbers.</description>
 	<url>https://github.com/axkr/symja-parser</url>
 	<inceptionYear>2016</inceptionYear>
