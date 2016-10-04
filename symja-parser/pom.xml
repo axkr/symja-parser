@@ -9,6 +9,21 @@
 	<url>https://github.com/axkr/symja-parser</url>
 	<inceptionYear>2016</inceptionYear>
 
+
+    <developers>
+        <developer>
+            <id>axelclk</id>
+            <name>Axel Kramer</name>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/axkr/symja-parser.git</connection>
+        <developerConnection>scm:git:[fetch=]https://github.com/axkr/symja-parser.git[push=]git@github.com:axkr/symja-parser.git</developerConnection>
+        <tag>master</tag>
+        <url>https://github.com/axkr/symja-parser</url>
+    </scm>
+    
 	<licenses>
 		<license>
 			<name>Apache License</name>
@@ -20,11 +35,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-
-	<scm>
-		<developerConnection>scm:git:[fetch=]https://github.com/axkr/symja-parser.git[push=]git@github.com:axkr/symja-parser.git</developerConnection>
-		<tag>master</tag>
-	</scm>
 
 	<dependencies>
 		<dependency>
