@@ -318,6 +318,13 @@ public class Scanner {
 	protected void getNextToken() throws SyntaxError {
 
 		while (fInputString.length() > fCurrentPosition) {
+			if (fInputString.charAt(fCurrentPosition) == '\\') {
+				if (fInputString.length() > fCurrentPosition + 1 && fInputString.charAt(fCurrentPosition + 1) == '[') {
+					fToken = TT_IDENTIFIER;
+					fCurrentChar = fInputString.charAt(fCurrentPosition++);
+					return;
+				}
+			}
 			getNextChar();
 			fToken = TT_EOF;
 
@@ -515,6 +522,26 @@ public class Scanner {
 	}
 
 	protected String getIdentifier() {
+		if (fCurrentChar == '\\') {
+			if (fInputString.length() > fCurrentPosition) {
+				if (fInputString.charAt(fCurrentPosition) == '[') {
+
+					final int startPosition = fCurrentPosition++ - 1;
+					getChar();
+					while (Character.isLetterOrDigit(fCurrentChar)) {
+						getChar();
+					}
+					if (fCurrentChar == ']') {
+						int endPosition = fCurrentPosition--;
+						getChar();
+						return fInputString.substring(startPosition, endPosition);
+					}
+					throwSyntaxError("Special identifier definition '\\[...]' not closed with ']' ");
+
+				}
+			}
+		}
+
 		final int startPosition = fCurrentPosition - 1;
 
 		getChar();

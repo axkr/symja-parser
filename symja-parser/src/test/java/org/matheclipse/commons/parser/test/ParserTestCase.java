@@ -325,6 +325,17 @@ public class ParserTestCase extends TestCase {
 		}
 	}
 	
+	public void testParser26() {
+		try {
+			Parser p = new Parser(true);
+			ASTNode obj = p.parse("\\[alpha]+\\[alpha]");
+			assertEquals(obj.toString(), "Plus(\\[alpha], \\[alpha])");
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals("", e.getMessage());
+		}
+	}
+	
 	public void testParserDerive() {
 		try {
 			Parser p = new Parser(true);
