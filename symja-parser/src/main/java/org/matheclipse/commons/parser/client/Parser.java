@@ -764,6 +764,9 @@ public class Parser extends Scanner {
 			if (fToken == TT_PRECEDENCE_OPEN) {
 				return getTimes(temp);
 			}
+			if (fToken == TT_ARGUMENTS_OPEN) {
+				return getFunctionArguments(temp);
+			}
 			return temp;
 
 		} else if (fToken == TT_LIST_OPEN) {

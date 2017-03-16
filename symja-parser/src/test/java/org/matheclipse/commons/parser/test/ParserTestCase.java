@@ -336,6 +336,15 @@ public class ParserTestCase extends TestCase {
 		}
 	}
 	
+	public void testParser27() {
+		try { 
+			Parser p = new Parser(true);
+			Object obj = p.parse("(a+b)[x]");
+			assertEquals(obj.toString(), "Plus(a, b)[x]");
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+	}
 	public void testParserDerive() {
 		try {
 			Parser p = new Parser(true);
