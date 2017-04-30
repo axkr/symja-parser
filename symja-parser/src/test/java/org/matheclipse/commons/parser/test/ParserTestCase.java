@@ -366,4 +366,15 @@ public class ParserTestCase extends TestCase {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	public void testParserIncrementPreIncrement() {
+		try {
+			Parser p = new Parser(true);
+			ASTNode obj = p.parse("++++a+++++2");
+			assertEquals(obj.toString(), "Plus(PreIncrement(PreIncrement(Increment(Increment(a)))), 2)");
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			assertEquals("", e.getMessage());
+		}
+	}
 }
