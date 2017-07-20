@@ -74,7 +74,7 @@ public class Console {
 
 		while (true) {
 			try {
-				expr = console.readString(System.out, ">>> ");
+				expr = console.readString(System.out, "▶   ");
 				if (expr != null) {
 					if ((expr.length() >= 4) && expr.toLowerCase().substring(0, 4).equals("exit")) {
 						break;
